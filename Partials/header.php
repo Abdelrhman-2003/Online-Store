@@ -83,3 +83,12 @@
             </nav>
         </header>
     </div>
+        <main>
+        <div class="relative overflow-hidden bg-white">
+            <div class="pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
+                <div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
+                    <div class="sm:max-w-lg">
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Welcome To My Online Store</h1>
+                        <p class="mt-4 text-xl text-gray-500">You'll find everything you need in our store, <br>
+                            Have a nice trip.</p>
+                    </div>
