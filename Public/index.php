@@ -11,6 +11,6 @@ $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];
 
 $router = new Router();
 
-require base_path("routes.php");
+require base_path("config/routes.php");
 
 $router->route($method, $uri);
