@@ -7,11 +7,16 @@ function dd($value){
     die();
 }
 
-function base_path($path) {
+function stringToArray(string $seprator , string $string){
+     return explode($seprator , $string);
+}
+
+
+function base_path(string $path) {
     return __DIR__ . '/../' . $path;
 }
 
-function view($path , $attributes = []){
+function view(string $path , array $attributes = []){
     extract($attributes);
-    require base_path("Views/{$path}");
+    require base_path("Views/Template/{$path}.phtml");
 }
