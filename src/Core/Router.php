@@ -13,6 +13,7 @@ class Router
             "uri" => $uri,
             "controllers" => $controllers
         ];
+
     }
 
     public function get($uri, $controllers)
@@ -39,7 +40,7 @@ class Router
     {
         foreach ($this->routes as $routes) {
             if (strtoupper($method) === $routes['method'] && $uri === $routes['uri']) {
-                require base_path("Https/Controllers/" . $routes['controllers']);
+                   
             }
         }
     }

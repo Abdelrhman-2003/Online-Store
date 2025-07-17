@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . ("/../Core/Function.php");
+require __DIR__ . ("/../src/Core/Function.php");
 
 require base_path("Core/Router.php");
 
