@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Http\Controllers\HomeControllers;
+
 class Router
 {
     public $routes = [];
@@ -13,7 +15,6 @@ class Router
             "uri" => $uri,
             "controllers" => $controllers
         ];
-
     }
 
     public function get($uri, $controllers)
@@ -40,7 +41,10 @@ class Router
     {
         foreach ($this->routes as $routes) {
             if (strtoupper($method) === $routes['method'] && $uri === $routes['uri']) {
-                   
+                [$className , $methodName] = stringToArray("::" , $routes["controllers"]);
+                require base_path("Http/Controllers/{$className}.php");
+                $className = "\App\Http\Controllers\\" . $className;
+                (new $className)->$methodName();
             }
         }
     }
