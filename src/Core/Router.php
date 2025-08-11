@@ -45,7 +45,9 @@ class Router
                 require base_path("Http/Controllers/{$className}.php");
                 $className = "\App\Http\Controllers\\" . $className;
                 (new $className)->$methodName();
+                exit();
             }
         }
+        abort();
     }
 }
