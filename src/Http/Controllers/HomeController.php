@@ -6,7 +6,7 @@ class HomeController
 {
     public function index()
     {
-        view("home", [
+        view("Template/home", [
             "categories" => $this->getCategories()
         ]);
     }
@@ -15,9 +15,10 @@ class HomeController
     {
         foreach ($this->getCategories() as $category) {
             if ($category['id'] === $id) {
-                view("showCategory", [
+                view("Template/showCategory", [
                     "products" => $category['Products'],
-                    "categoryName" => $category['CategoryName']
+                    "categoryName" => $category['CategoryName'],
+                    "categories" => $this->getCategories()
                 ]);
                 die();
             }
