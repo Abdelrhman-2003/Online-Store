@@ -25,31 +25,19 @@
                             <div class="flex">
                                 <div class="relative flex">
                                     <div class="relative flex items-center">
-                                        <a href="#clothies">Home</a>
+                                        <a href="/">Home</a>
                                     </div>
                                 </div>
                             </div>
-
+                                <?php foreach($categories as $category) : ?>
                             <div class="flex">
                                 <div class="relative flex">
                                     <div class="relative flex items-center">
-                                        <a href="#clothies">Clothies Category</a>
+                                        <a href="/category/<?=$category['id']?>/products"><?= $category["CategoryName"] ?></a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex">
-                                <div class="relative flex">
-                                    <div class="relative flex items-center">
-                                        <a href="#technology">Technology Category</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex">
-                                <div class="relative flex items-center w-2">
-                                    <a href="#vegfru">Vegetables&Fruits Category</a>
-                                </div>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <div class="ml-auto flex items-center">

@@ -4,19 +4,33 @@ namespace App\Http\Controllers;
 
 class HomeController
 {
-
     public function index()
     {
-        view("home", [
-            "categories" => $this->showCategories()
+        view("Template/home", [
+            "categories" => $this->getCategories()
         ]);
     }
 
+    public function show(int $id)
+    {
+        foreach ($this->getCategories() as $category) {
+            if ($category['id'] === $id) {
+                view("Template/showCategory", [
+                    "products" => $category['Products'],
+                    "categoryName" => $category['CategoryName'],
+                    "categories" => $this->getCategories()
+                ]);
+                die();
+            }
+        }
+        abort();
+    }
 
-    public function showCategories()
+    private function getCategories()
     {
         $categories = [
             [
+                "id" => 1,
                 "CategoryName" =>  "Clothies Category",
                 "Products" => [
                     [
@@ -63,6 +77,7 @@ class HomeController
                 ]
             ],
             [
+                "id" => 2,
                 "CategoryName" =>  "Technology Category",
                 "Products" => [
                     [
@@ -109,6 +124,7 @@ class HomeController
                 ]
             ],
             [
+                "id" => 3,
                 "CategoryName" =>  "Vegetables&Fruits Category",
                 "Products" => [
                     [

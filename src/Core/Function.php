@@ -18,5 +18,10 @@ function base_path(string $path) {
 
 function view(string $path , array $attributes = []){
     extract($attributes);
-    require base_path("Views/Template/{$path}.phtml");
+    require base_path("Views/{$path}.phtml");
+}
+
+function abort($code = 404){
+    require base_path("Views/Template/{$code}.phtml");
+    die();
 }
