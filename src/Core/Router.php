@@ -40,12 +40,28 @@ class Router
     public function route($method, $uri)
     {
         foreach ($this->routes as $routes) {
-            if (strtoupper($method) === $routes['method'] && $uri === $routes['uri']) {
-                [$className , $methodName] = stringToArray("::" , $routes["controllers"]);
-                require base_path("Http/Controllers/{$className}.php");
-                $className = "\App\Http\Controllers\\" . $className;
-                (new $className)->$methodName();
-                exit();
+
+            if (strtoupper($method) === $routes['method']) {
+
+                $pattern = preg_replace('/\{([^\/]+)\}/', '([^/]+)', $routes['uri']);
+
+                $pattern = "#^" . $pattern . "$#";
+
+                if (preg_match($pattern, $uri, $matches)) {
+
+
+                    array_shift($matches);
+                    
+
+                    [$className, $methodName] = stringToArray("::", $routes["controllers"]);
+
+                    require base_path("Http/Controllers/{$className}.php");
+
+                    $className = "\App\Http\Controllers\\" . $className;
+
+                    call_user_func_array([new $className, $methodName], $matches);
+                    exit();
+                }
             }
         }
         abort();
