@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
-class HomeController
+class CategoryController
 {
-    public function index()
+
+    public function show(int $id)
     {
-        view("Template/home", [
-            "categories" => $this->getCategories()
-        ]);
-        die();
+        foreach ($this->getCategories() as $category) {
+            if ($category['id'] === $id) {
+                view("Template/showCategory", [
+                    "products" => $category['Products'],
+                    "categoryName" => $category['CategoryName'],
+                    "categories" => $this->getCategories()
+                ]);
+                die();
+            }
+        }
+        abort();
     }
 
     private function getCategories()
