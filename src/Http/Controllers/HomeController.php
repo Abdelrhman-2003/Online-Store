@@ -9,6 +9,7 @@ class HomeController
         view("Template/home", [
             "categories" => $this->getCategories()
         ]);
+        die();
     }
 
     public function show(int $id)
