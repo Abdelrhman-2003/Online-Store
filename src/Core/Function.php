@@ -24,7 +24,7 @@ function view(string $path, array $attributes = [])
     require base_path("Views/Template/{$path}.phtml");
 }
 
-function abort($code, $message)
+function abort(int $code, string $message)
 {
     http_response_code($code);
 
