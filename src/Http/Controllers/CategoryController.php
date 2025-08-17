@@ -9,7 +9,7 @@ class CategoryController
     {
         foreach ($this->getCategories() as $category) {
             if ($category['id'] === $id) {
-                view("Template/showCategory", [
+                view("showCategory", [
                     "products" => $category['Products'],
                     "categoryName" => $category['CategoryName'],
                     "categories" => $this->getCategories()
@@ -17,7 +17,7 @@ class CategoryController
                 die();
             }
         }
-        abort();
+        abort(404 , "No other category found");
     }
 
     private function getCategories()

@@ -54,7 +54,7 @@ class Router
                     [$className, $methodName] = stringToArray("::", $routes["controllers"]);
 
                     if (! file_exists(base_path("Http/Controllers/{$className}.php"))) {
-                        abort();
+                        abort(500, "Controller Not Found!");
                     }
                     require base_path("Http/Controllers/{$className}.php");
 
@@ -66,6 +66,6 @@ class Router
                 }
             }
         }
-        abort();
+        abort(404, "Not Found Page!");
     }
 }

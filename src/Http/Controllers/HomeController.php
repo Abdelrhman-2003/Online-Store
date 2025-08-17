@@ -6,7 +6,7 @@ class HomeController
 {
     public function index()
     {
-        view("Template/home", [
+        view("home", [
             "categories" => $this->getCategories()
         ]);
         die();
