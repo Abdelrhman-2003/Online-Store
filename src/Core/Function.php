@@ -24,9 +24,12 @@ function view(string $path, array $attributes = [])
     require base_path("Views/Template/{$path}.phtml");
 }
 
-function abort($code , $message)
+function abort($code, $message)
 {
-    view("statusCode",
+    http_response_code($code);
+
+    view(
+        "statusCode",
         [
             "message" => $message,
             "code" => $code
