@@ -49,13 +49,15 @@ class Router
 
                 if (preg_match($pattern, $uri, $matches)) {
 
-
                     array_shift($matches);
-                    
 
                     [$className, $methodName] = stringToArray("::", $routes["controllers"]);
 
+                    if (! file_exists(base_path("Http/Controllers/{$className}.php"))) {
+                        abort();
+                    }
                     require base_path("Http/Controllers/{$className}.php");
+
 
                     $className = "\App\Http\Controllers\\" . $className;
 
