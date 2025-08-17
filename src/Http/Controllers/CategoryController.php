@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
-class HomeController
+class CategoryController
 {
-    public function index()
+
+    public function show(int $id)
     {
-        view("home", [
-            "categories" => $this->getCategories()
-        ]);
-        die();
+        foreach ($this->getCategories() as $category) {
+            if ($category['id'] === $id) {
+                view("showCategory", [
+                    "products" => $category['Products'],
+                    "categoryName" => $category['CategoryName'],
+                    "categories" => $this->getCategories()
+                ]);
+                die();
+            }
+        }
+        abort(404 , "No other category found");
     }
 
     private function getCategories()
