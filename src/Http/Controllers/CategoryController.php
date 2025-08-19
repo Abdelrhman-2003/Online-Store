@@ -14,8 +14,8 @@ class CategoryController
         foreach ($this->getCategories() as $category) {
             if ($category['id'] === $id) {
                 view("showCategory", [
-                    "products" => $category['Products'],
-                    "categoryName" => $category['CategoryName'],
+                    "products" => $this->getProducts($id),
+                    "category" => $this->getCategory($id),
                     "categories" => $this->getCategories()
                 ]);
                 die();
@@ -30,9 +30,15 @@ class CategoryController
         return $categories;
     }
 
-    private function getProducts()
+    private function getCategory(int $id)
     {
-        $products = db()->fetchAll("SELECT * FROM products");
+        $category = db()->fetch("SELECT * FROM categories where id = ?", [$id]);
+        return $category;
+    }
+    
+    private function getProducts(int $id)
+    {
+        $products = db()->fetchAll("SELECT * FROM products where category_id = ?", [$id]);
         return $products;
     }
 }
