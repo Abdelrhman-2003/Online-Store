@@ -24,11 +24,19 @@ class CategoryController
         abort(404, "No other category found");
     }
 
-    private function getCategories() {
+    private function getCategories()
+    {
         $config = require base_path("./config/database.php");
         $db = new Database($config['connections'][$config["default"]]);
         $categories = $db->fetchAll("SELECT * FROM categories");
         return $categories;
     }
 
+    private function getProducts()
+    {
+        $config = require base_path("./config/database.php");
+        $db = new Database($config['connections'][$config["default"]]);
+        $products = $db->fetchAll("SELECT * FROM products");
+        return $products;
+    }
 }
