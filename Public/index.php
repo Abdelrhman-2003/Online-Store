@@ -4,6 +4,7 @@ require __DIR__ . ("/../src/Core/Function.php");
 
 require base_path("Core/Router.php");
 
+use App\Core\PDOErrors;
 use Core\Router;
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
@@ -13,4 +14,8 @@ $router = new Router();
 
 require base_path("config/routes.php");
 
-$router->route($method, $uri);
+try {
+    $router->route($method, $uri);
+} catch (PDOException $e) {
+    die($e->getMessage());
+}
