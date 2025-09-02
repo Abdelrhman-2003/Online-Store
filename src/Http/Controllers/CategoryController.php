@@ -26,19 +26,18 @@ class CategoryController
 
     private function getCategories()
     {
-        $categories = db()->fetchAll("SELECT * FROM categories");
-        return $categories;
+        return db()->fetchAll("SELECT * FROM categories");
+        
     }
 
     private function getCategory(int $id)
     {
-        $category = db()->fetch("SELECT * FROM categories where id = ?", [$id]);
-        return $category;
+        return db()->fetch("SELECT * FROM categories where id = ? LIMIT 1", [$id]);
+        
     }
     
     private function getProducts(int $id)
     {
-        $products = db()->fetchAll("SELECT * FROM products where category_id = ?", [$id]);
-        return $products;
+         return db()->fetchAll("SELECT * FROM products where category_id = ?", [$id]);
     }
 }
