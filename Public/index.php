@@ -17,5 +17,8 @@ require base_path("config/routes.php");
 try {
     $router->route($method, $uri);
 } catch (PDOException $e) {
-    die($e->getMessage());
+
+    error_log($e->getMessage() . "\n", 3, __DIR__ . "/../logs/error.log");
+
+    abort(500 , "Something went wrong, please try again later.");
 }
