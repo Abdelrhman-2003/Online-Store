@@ -51,4 +51,8 @@ class Database
     {
         $this->query($sql, $params);
     }
+     
+    public function disConnect(){
+        $this->connection = null;
+    }
 }
