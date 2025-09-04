@@ -2,7 +2,11 @@
 
 namespace App\Core;
 
+use App\Core\Exception\QueryException;
 use PDO;
+use PDOException;
+
+require "Exceptions/QueryException.php";
 
 class Database
 {
@@ -20,8 +24,15 @@ class Database
 
     private function query(string $sql, array $params = [])
     {
-        $this->statement = $this->connection->prepare($sql);
-        $this->statement->execute($params);
+        try {
+            $this->statement = $this->connection->prepare($sql);
+            $this->statement->execute($params);
+        } catch (PDOException $e) {
+
+            error_log($e->getMessage() . "\n", 3, __DIR__ . "/../../logs/error.log");
+
+            throw new QueryException("Something went wrong, please try again later");
+        }
     }
 
     public function fetchAll(string $sql, array $params = [])

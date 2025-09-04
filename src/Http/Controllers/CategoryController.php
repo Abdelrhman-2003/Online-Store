@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Database;
+use App\Core\Exception\RecordNotFoundException;
 
-require base_path("./Core/Database.php");
+require base_path("./Core/Exceptions/RecordNotFoundException.php");
 
 class CategoryController
 {
-
     public function show(int $id)
     {
         if ($this->getCategory($id) != false) {
@@ -20,7 +19,6 @@ class CategoryController
             ]);
             die();
         }
-        abort(404, "No other category found");
     }
 
     private function getCategories()
@@ -30,7 +28,12 @@ class CategoryController
 
     private function getCategory(int $id)
     {
-        return db()->fetch("SELECT * FROM categories where id = ? LIMIT 1", [$id]);
+        $category = db()->fetch("SELECT * FROM categories where id = ? LIMIT 1 ", [$id]) ?? null;
+
+        if ($category === false) {
+            throw new RecordNotFoundException("Category with ID {$id} not found!");
+        }
+        return $category;
     }
 
     private function getProducts(int $id)

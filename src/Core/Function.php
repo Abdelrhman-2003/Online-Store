@@ -2,6 +2,8 @@
 
 use App\Core\Database;
 
+require "Database.php";
+
 function dd($value)
 {
     echo "<pre>";

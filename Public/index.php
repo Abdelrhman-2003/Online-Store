@@ -1,10 +1,15 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require __DIR__ . ("/../src/Core/Function.php");
 
 require base_path("Core/Router.php");
 
-use App\Core\PDOErrors;
+use App\Core\Exception\RecordNotFoundException;
+use App\Core\Exception\QueryException;
 use Core\Router;
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
@@ -16,9 +21,14 @@ require base_path("config/routes.php");
 
 try {
     $router->route($method, $uri);
-} catch (PDOException $e) {
 
-    error_log($e->getMessage() . "\n", 3, __DIR__ . "/../logs/error.log");
+} catch (QueryException $e) {
+    abort(500, $e->getMessage());
 
-    abort(500 , "Something went wrong, please try again later.");
+} catch (RecordNotFoundException $e) {
+    abort(404, $e->getMessage());
+
+} catch (Exception $e) {
+    error_log($e->getMessage(), 3, __DIR__ . "/../logs/error.log");
+    abort(500, "Unexpected error, please try again later.");
 }
