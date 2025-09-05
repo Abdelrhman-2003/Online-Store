@@ -12,7 +12,7 @@ class CategoryController
     {
         if ($this->getCategory($id) != false) {
 
-            view("showCategory", [
+            view("Category/show", [
                 "products" => $this->getProducts($id),
                 "category" => $this->getCategory($id),
                 "categories" => $this->getCategories()
