@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Core\Exception\RecordNotFoundException;
+use App\Http\Validation\FormValidation;
 
 require base_path("./Core/Exceptions/RecordNotFoundException.php");
+require base_path("Http/Validation/FormValidation.php");
 
 class CategoryController
 {
@@ -34,10 +36,29 @@ class CategoryController
         view("Categories/create", [
             "categories" => $this->getCategories()
         ]);
+        die();
     }
 
-    public function store(){
-            
+    public function store(array $attributes)
+    {
+        $validated = new FormValidation($attributes);
+
+        if (!empty($validated->errors)) {
+            view("Categories/create", [
+                "categories" => $this->getCategories(),
+                "errors" => $validated->errors
+            ]);
+            die();
+        }
+
+        db()->execute("INSERT INTO categories (categoryName , description , image) 
+        VALUE (?, ?, ?)", [
+            $attributes['category-name'],
+            $attributes["category-desc"],
+            $attributes['category-img']
+        ]);
+        header("Location: /categories");
+        die();
     }
 
     private function getCategories()
