@@ -6,3 +6,4 @@ $router->get("/category/{id}/products" , "CategoryController::show");
 // Categories
 $router->get("/categories" , "CategoryController::index");
 $router->get("/categories/create" , "CategoryController::create");
+$router->post("/categories" , "CategoryController::store");

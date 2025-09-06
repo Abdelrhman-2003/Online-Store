@@ -36,6 +36,10 @@ class CategoryController
         ]);
     }
 
+    public function store(){
+            
+    }
+
     private function getCategories()
     {
         return db()->fetchAll("SELECT * FROM categories");
