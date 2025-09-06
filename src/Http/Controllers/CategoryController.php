@@ -26,6 +26,14 @@ class CategoryController
         view("Categories/index", [
             "categories" => $this->getCategories()
         ]);
+        die();
+    }
+
+    public function create()
+    {
+        view("Categories/create", [
+            "categories" => $this->getCategories()
+        ]);
     }
 
     private function getCategories()
