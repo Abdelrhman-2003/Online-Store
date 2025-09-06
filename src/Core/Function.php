@@ -42,6 +42,11 @@ function abort(int $code, string $message)
     die();
 }
 
+function redirect($path){
+    header("Location: {$path}");
+    die();
+}
+
 function db(){
     static $database = null;
     if($database === null){

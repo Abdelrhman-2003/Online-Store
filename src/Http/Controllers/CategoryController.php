@@ -57,8 +57,7 @@ class CategoryController
             $attributes["category-desc"],
             $attributes['category-img']
         ]);
-        header("Location: /categories");
-        die();
+        redirect("/categories");
     }
 
     private function getCategories()
