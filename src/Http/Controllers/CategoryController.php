@@ -21,6 +21,13 @@ class CategoryController
         }
     }
 
+    public function index()
+    {
+        view("Categories/index", [
+            "categories" => $this->getCategories()
+        ]);
+    }
+
     private function getCategories()
     {
         return db()->fetchAll("SELECT * FROM categories");
