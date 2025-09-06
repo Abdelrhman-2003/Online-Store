@@ -58,9 +58,10 @@ class Router
                     }
                     require base_path("Http/Controllers/{$className}.php");
 
-
                     $className = "\App\Http\Controllers\\" . $className;
-
+                    
+                        $matches[] = $_POST ?? $matches ;
+                    
                     call_user_func_array([new $className, $methodName], $matches);
                     exit();
                 }
