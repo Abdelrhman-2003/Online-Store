@@ -29,6 +29,7 @@ try {
     abort(404, $e->getMessage());
 
 } catch (Exception $e) {
-    error_log($e->getMessage(), 3, __DIR__ . "/../logs/error.log");
-    abort(500, "Unexpected error, please try again later.");
+
+    errorLog($e->getMessage(), $e->getFile(), $e->getLine());
+    abort(500, "Something went wrong, please try again later");
 }

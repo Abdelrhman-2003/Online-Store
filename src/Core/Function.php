@@ -42,14 +42,27 @@ function abort(int $code, string $message)
     die();
 }
 
-function redirect($path){
+function redirect($path)
+{
     header("Location: {$path}");
     die();
 }
 
-function db(){
+function errorLog($error, $file, $line)
+{
+    error_log(
+            "ُError: " . $error . " | " .
+            "File: " . $file . " | " .
+            "Line: " . $line . "\n",
+        3,
+        __DIR__ . "/../../logs/error.log"
+    );
+}
+
+function db()
+{
     static $database = null;
-    if($database === null){
+    if ($database === null) {
         $config = require base_path("./config/database.php");
         $database = new Database($config['connections'][$config['default']]);
     }

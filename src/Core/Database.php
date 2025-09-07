@@ -29,7 +29,7 @@ class Database
             $this->statement->execute($params);
         } catch (PDOException $e) {
 
-            error_log($e->getMessage() . "\n", 3, __DIR__ . "/../../logs/error.log");
+            errorLog($e->getMessage(), $e->getFile(), $e->getLine());
 
             throw new QueryException("Something went wrong, please try again later");
         }
@@ -51,8 +51,9 @@ class Database
     {
         $this->query($sql, $params);
     }
-     
-    public function disConnect(){
+
+    public function disConnect()
+    {
         $this->connection = null;
     }
 }
