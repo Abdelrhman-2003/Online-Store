@@ -28,10 +28,8 @@ class Database
             $this->statement = $this->connection->prepare($sql);
             $this->statement->execute($params);
         } catch (PDOException $e) {
-
-            errorLog($e->getMessage(), $e->getFile(), $e->getLine());
-
-            throw new QueryException("Something went wrong, please try again later");
+            
+            throw new QueryException($e->getMessage());
         }
     }
 

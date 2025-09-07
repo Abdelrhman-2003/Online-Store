@@ -51,12 +51,18 @@ function redirect($path)
 function errorLog($error, $file, $line)
 {
     error_log(
-            "ُError: " . $error . " | " .
+        "ُError: " . $error . " | " .
             "File: " . $file . " | " .
             "Line: " . $line . "\n",
         3,
         __DIR__ . "/../../logs/error.log"
     );
+}
+
+function serverError($error, $file, $line)
+{
+    errorLog($error, $file, $line);
+    abort(500, "Something went wrong, please try again later");
 }
 
 function db()

@@ -2,7 +2,9 @@
 
 namespace Core;
 
-use Http\Controllers\HomeControllers;
+use App\Core\Exception\FileNotFoundException;
+
+require "Exceptions/FileNotFoundException.php";
 
 class Router
 {
@@ -54,14 +56,15 @@ class Router
                     [$className, $methodName] = stringToArray("::", $routes["controllers"]);
 
                     if (! file_exists(base_path("Http/Controllers/{$className}.php"))) {
-                        abort(500, "Controller Not Found!");
+                        throw new FileNotFoundException("{$className} Class Not Found!");
                     }
+
                     require base_path("Http/Controllers/{$className}.php");
 
                     $className = "\App\Http\Controllers\\" . $className;
-                    
-                        $matches[] = $_POST ?? $matches ;
-                    
+
+                    $matches[] = $_POST ?? $matches;
+
                     call_user_func_array([new $className, $methodName], $matches);
                     exit();
                 }

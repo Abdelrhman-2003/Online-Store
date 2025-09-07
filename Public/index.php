@@ -8,6 +8,7 @@ require __DIR__ . ("/../src/Core/Function.php");
 
 require base_path("Core/Router.php");
 
+use App\Core\Exception\FileNotFoundException;
 use App\Core\Exception\RecordNotFoundException;
 use App\Core\Exception\QueryException;
 use Core\Router;
@@ -23,13 +24,14 @@ try {
     $router->route($method, $uri);
 
 } catch (QueryException $e) {
-    abort(500, $e->getMessage());
+    serverError($e->getMessage(), $e->getFile(), $e->getLine());
 
 } catch (RecordNotFoundException $e) {
     abort(404, $e->getMessage());
 
+} catch (FileNotFoundException $e) {
+    serverError($e->getMessage(), $e->getFile(), $e->getLine());
+    
 } catch (Exception $e) {
-
-    errorLog($e->getMessage(), $e->getFile(), $e->getLine());
-    abort(500, "Something went wrong, please try again later");
+    serverError($e->getMessage(), $e->getFile(), $e->getLine());
 }
