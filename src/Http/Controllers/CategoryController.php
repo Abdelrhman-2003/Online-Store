@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function show(int $id)
     {
-    if ($this->getCategory($id) != false) {
+        if ($this->getCategory($id) != false) {
             $this->render("Category/show", [
                 "categories" => $this->getCategories(),
                 "category" => $this->getCategory($id),
@@ -53,8 +53,16 @@ class CategoryController extends Controller
             $attributes["category-desc"],
             $attributes['category-img']
         ]);
-        $_SESSION["_flash"]['addedSuccess'] = $attributes['category-name'];
+        $_SESSION["_flash"]['MessageSuccess'] = $attributes['category-name']. " Added Successfully";
         redirect("/categories");
+    }
+
+    public function edit(int $id)
+    {
+        $this->render("Categories/edit", [
+            "category" => $this->getCategory($id),
+            "categories" => $this->getCategories()
+        ]);
     }
 
     private function getCategories()
