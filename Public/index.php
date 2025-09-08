@@ -19,16 +19,12 @@ require base_path("config/routes.php");
 
 try {
     $router->route($method, $uri);
-
 } catch (QueryException $e) {
     serverError($e->getMessage(), $e->getFile(), $e->getLine());
-
 } catch (RecordNotFoundException $e) {
     abort(404, $e->getMessage());
-
 } catch (FileNotFoundException $e) {
     serverError($e->getMessage(), $e->getFile(), $e->getLine());
-    
 } catch (Exception $e) {
     serverError($e->getMessage(), $e->getFile(), $e->getLine());
 }

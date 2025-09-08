@@ -7,36 +7,33 @@ use App\Http\Validation\FormValidation;
 
 require base_path("./Core/Exceptions/RecordNotFoundException.php");
 require base_path("Http/Validation/FormValidation.php");
+require "Controller.php";
 
-class CategoryController
+class CategoryController extends Controller
 {
     public function show(int $id)
     {
-        if ($this->getCategory($id) != false) {
-
-            view("Category/show", [
-                "products" => $this->getProducts($id),
+    if ($this->getCategory($id) != false) {
+            $this->render("Category/show", [
+                "categories" => $this->getCategories(),
                 "category" => $this->getCategory($id),
-                "categories" => $this->getCategories()
+                "products" => $this->getProducts($id)
             ]);
-            die();
         }
     }
 
     public function index()
     {
-        view("Categories/index", [
-            "categories" => $this->getCategories()
+        $this->render("Categories/index", [
+            "categories" => $this->getCategories(),
         ]);
-        die();
     }
 
     public function create()
     {
-        view("Categories/create", [
-            "categories" => $this->getCategories()
+        $this->render("Categories/index", [
+            "categories" => $this->getCategories(),
         ]);
-        die();
     }
 
     public function store(array $attributes)
@@ -44,11 +41,10 @@ class CategoryController
         $validated = new FormValidation($attributes);
 
         if (!empty($validated->errors)) {
-            view("Categories/create", [
+            $this->render("Categories/create", [
                 "categories" => $this->getCategories(),
                 "errors" => $validated->errors
             ]);
-            die();
         }
 
         db()->execute("INSERT INTO categories (categoryName , description , image) 
