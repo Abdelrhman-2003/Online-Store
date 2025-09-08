@@ -65,6 +65,28 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function update(array $attributes)
+    {
+        $validated = new FormValidation($attributes);
+
+        if (! empty($validated->errors)) {
+            $this->render("Categories/edit", [
+                "categories" => $this->getCategories(),
+                "category" => $this->getCategory($attributes['id']),
+                "error" => $validated->errors
+            ]);
+        }
+
+        db()->execute("UPDATE categories set categoryName = ? , description = ? , image = ? where id = ?", [
+            $attributes['category-name'],
+            $attributes['category-desc'],
+            $attributes['category-img'],
+            $attributes['id']
+        ]);
+        $_SESSION['_flash']['MessageSuccess'] = $attributes['category-name']." Updated Successfully";
+        redirect("/categories");
+    }
+
     private function getCategories()
     {
         return db()->fetchAll("SELECT * FROM categories");
