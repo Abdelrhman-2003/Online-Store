@@ -7,6 +7,9 @@ require base_path("Views/Partials/head.phtml") ;
     <?php require base_path("Views/Partials/nav.phtml") ?>
 <div class="min-h-screen bg-gray-100 py-8">
   <div class="max-w-7xl mx-auto px-4">
+    <?php if($_SESSION["_flash"]["addedSuccess"] ?? false) : ?>
+    <h2 class="text-center mb-16 text-green-500 text-4xl font-bold"> <?= $_SESSION["_flash"]['addedSuccess'] ?? "" ?> added successfully</h2>
+    <?php endif ; ?>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
       <!-- Category Card 1 -->
        <?php foreach($categories as $category) : ?>

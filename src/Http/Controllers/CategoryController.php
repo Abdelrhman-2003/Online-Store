@@ -57,6 +57,7 @@ class CategoryController
             $attributes["category-desc"],
             $attributes['category-img']
         ]);
+        $_SESSION["_flash"]['addedSuccess'] = $attributes['category-name'];
         redirect("/categories");
     }
 
