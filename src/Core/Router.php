@@ -39,6 +39,11 @@ class Router
         $this->add("PATCH", $uri, $controllers);
     }
 
+    public function put($uri, $controllers)
+    {
+        $this->add("PUT", $uri, $controllers);
+    }
+
     public function route($method, $uri)
     {
         foreach ($this->routes as $routes) {
