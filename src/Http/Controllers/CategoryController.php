@@ -31,7 +31,7 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $this->render("Categories/index", [
+        $this->render("Categories/create", [
             "categories" => $this->getCategories(),
         ]);
     }
@@ -53,7 +53,7 @@ class CategoryController extends Controller
             $attributes["category-desc"],
             $attributes['category-img']
         ]);
-        $_SESSION["_flash"]['MessageSuccess'] = $attributes['category-name']. " Added Successfully";
+        $_SESSION["_flash"]['AddedSuccess'] = $attributes['category-name'] . " Added Successfully";
         redirect("/categories");
     }
 
@@ -83,7 +83,14 @@ class CategoryController extends Controller
             $attributes['category-img'],
             $attributes['id']
         ]);
-        $_SESSION['_flash']['MessageSuccess'] = $attributes['category-name']." Updated Successfully";
+        $_SESSION['_flash']['UpdatedSuccess'] = $attributes['category-name'] . " Updated Successfully";
+        redirect("/categories");
+    }
+
+    public function destroy(array $attributes)
+    {
+        db()->execute("DELETE From categories where id = ?", [$attributes['id']]);
+        $_SESSION['_flash']['DeletedSuccess'] = $attributes['category-name'] . " Deleted Successfully";
         redirect("/categories");
     }
 
