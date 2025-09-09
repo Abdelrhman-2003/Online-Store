@@ -17,12 +17,20 @@ require base_path("Views/Partials/head.phtml");
             <h3 class="text-xl font-bold text-indigo-700 mb-2"><?= $category['categoryName'] ?></h3>
             <p class="text-gray-500 text-center mb-4"><?= $category['description'] ?></p>
             <div class="flex space-x-3 w-full mt-auto">
-              <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition">Show</button>
-              <a href="/categories/edit/<?= $category['id'] ?>" class="text-center flex-1 bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-lg font-medium transition">Update</a>
-              <form method="POST" action="/categories/destroy">
+              <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg font-medium transition">
+                Show
+              </button>
+              <a href="/categories/edit/<?= $category['id'] ?>"
+                class="flex-1 text-center bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-lg font-medium transition">
+                Update
+              </a>
+              <form method="POST" action="/categories/destroy" class="flex-1">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="id" value="<?= $category['id'] ?>">
-                <button class="text-center flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition">Delete</button>
+                <button
+                  class="w-full text-center bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition">
+                  Delete
+                </button>
               </form>
             </div>
           </div>
