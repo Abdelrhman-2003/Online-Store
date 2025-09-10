@@ -91,8 +91,13 @@ class CategoryController extends Controller
 
     public function destroy(array $attributes)
     {
-        db()->execute("DELETE From categories where id = ?", [$attributes['id']]);
-        Session::flash("DeletedMessage", " Deleted Successfully");
+        if (!empty($this->getProducts($attributes['id']))) {
+            Session::flash("DeletedMessage", "You Can't Delete This Category Because Contain Some Products!");
+        } else {
+            db()->execute("DELETE From categories where id = ?", [$attributes['id']]);
+            Session::flash("DeletedMessage", " Deleted Successfully");
+        }
+
         redirect("/categories");
     }
 
