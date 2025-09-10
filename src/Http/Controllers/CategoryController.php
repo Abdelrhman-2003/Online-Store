@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Core\Exception\RecordNotFoundException;
+use App\Core\Session;
 use App\Http\Validation\FormValidation;
 
 require base_path("./Core/Exceptions/RecordNotFoundException.php");
+require base_path("./Core/Session.php");
 require base_path("Http/Validation/FormValidation.php");
 require "Controller.php";
 
@@ -53,7 +55,7 @@ class CategoryController extends Controller
             $attributes["category-desc"],
             $attributes['category-img']
         ]);
-        $_SESSION["_flash"]['AddedSuccess'] = $attributes['category-name'] . " Added Successfully";
+        Session::flash("AddedMessage", $attributes['category-name'] . " Added Successfully");
         redirect("/categories");
     }
 
@@ -83,14 +85,14 @@ class CategoryController extends Controller
             $attributes['category-img'],
             $attributes['id']
         ]);
-        $_SESSION['_flash']['UpdatedSuccess'] = $attributes['category-name'] . " Updated Successfully";
+        Session::flash("UpdatedMessage", $attributes['category-name'] . " Updated Successfully");
         redirect("/categories");
     }
 
     public function destroy(array $attributes)
     {
         db()->execute("DELETE From categories where id = ?", [$attributes['id']]);
-        $_SESSION['_flash']['DeletedSuccess'] = $attributes['category-name'] . " Deleted Successfully";
+        Session::flash("DeletedMessage", " Deleted Successfully");
         redirect("/categories");
     }
 

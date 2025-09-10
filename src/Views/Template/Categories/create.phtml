@@ -36,7 +36,7 @@ require base_path("Views/Partials/head.phtml") ?>
                     name="category-img"
                     placeholder="https://example.com/image.jpg"
                     class="w-full px-4 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition">
-                <p class="text-red-500 text-md"><?= $error['categoryImage'] ?? "" ?></p>
+                <p class="text-red-500 text-md"><?= $errors['categoryImage'] ?? "" ?></p>
             </div>
             <button
                 type="submit"

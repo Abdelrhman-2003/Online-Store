@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
+
+use App\Core\Session;
+
 require base_path("Views/Partials/head.phtml");
 ?>
 
@@ -8,7 +11,23 @@ require base_path("Views/Partials/head.phtml");
   <?php require base_path("Views/Partials/nav.phtml") ?>
   <div class="min-h-screen bg-gray-100 py-8">
     <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-center mb-16 text-green-500 text-4xl font-bold"> <?= $_SESSION["_flash"]['AddedSuccess'] ?? $_SESSION["_flash"]['UpdatedSuccess']  ?? $_SESSION["_flash"]['DeletedSuccess'] ?? false ?> </h2>
+
+      <div class="max-w-7xl mx-auto px-4">
+        <?php if (Session::get("DeletedMessage") ?? false) : ?>
+          <h2 class="text-center text-red-600 text-5xl font-extrabold 
+       tracking-wide drop-shadow-lg bg-red-100 border border-red-400 
+       rounded-xl px-8 py-6 mb-12">
+            <?= Session::get("DeletedMessage") ?>
+          </h2>
+        <?php elseif (Session::get("AddedMessage") ?? Session::get("UpdatedMessage") ?? false) : ?>
+          <h2 class="text-center text-green-600 text-5xl font-extrabold 
+       tracking-wide drop-shadow-lg bg-green-100 border border-green-400 
+       rounded-xl px-8 py-6 mb-12">
+            <?= Session::get("AddedMessage") ?? Session::get("UpdatedMessage") ?>
+          </h2>
+        <?php endif; ?>
+      </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         <!-- Category Card 1 -->
         <?php foreach ($categories as $category) : ?>
