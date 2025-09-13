@@ -10,15 +10,12 @@ class CategoryController
 {
     public function show(int $id)
     {
-        if ($this->getCategory($id) != false) {
-
             view("showCategory", [
                 "products" => $this->getProducts($id),
                 "category" => $this->getCategory($id),
                 "categories" => $this->getCategories()
             ]);
             die();
-        }
     }
 
     private function getCategories()
