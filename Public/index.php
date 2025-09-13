@@ -22,7 +22,7 @@ require base_path("config/routes.php");
 try {
     $router->route($method, $uri);
 
-} catch (QueryException $e) {
+} catch (RuntimeException $e) {
     abort(500, $e->getMessage());
 
 } catch (RecordNotFoundException $e) {
