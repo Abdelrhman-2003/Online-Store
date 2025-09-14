@@ -13,10 +13,10 @@ class Database
     private $connection;
     private $statement;
 
-    public function __construct(array $config = [], string $username = "root", string $password = "")
+    public function __construct(array $config = [])
     {
         $dsn = "mysql:" . http_build_query($config, "", ";");
-        $this->connection = new PDO($dsn, $username, $password, [
+        $this->connection = new PDO($dsn, $config['username'], $config['password'], [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
@@ -51,8 +51,9 @@ class Database
     {
         $this->query($sql, $params);
     }
-     
-    public function disConnect(){
+
+    public function disConnect()
+    {
         $this->connection = null;
     }
 }
