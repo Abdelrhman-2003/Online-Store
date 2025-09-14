@@ -15,13 +15,12 @@ class CategoryController extends Controller
 {
     public function show(int $id)
     {
-        if ($this->getCategory($id) != false) {
-            $this->render("Category/show", [
-                "categories" => $this->getCategories(),
+            view("showCategory", [
+                "products" => $this->getProducts($id),
                 "category" => $this->getCategory($id),
                 "products" => $this->getProducts($id)
             ]);
-        }
+            die();
     }
 
     public function index()

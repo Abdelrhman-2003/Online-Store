@@ -2,8 +2,8 @@
 
 namespace App\Core\Exception;
 
-use Exception;
+use RuntimeException;
 
-class QueryException extends Exception{
+class QueryException extends RuntimeException{
     //
 }
