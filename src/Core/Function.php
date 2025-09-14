@@ -1,5 +1,9 @@
 <?php
 
+use App\Core\Database;
+
+require "Database.php";
+
 function dd($value)
 {
     echo "<pre>";
@@ -36,4 +40,13 @@ function abort(int $code, string $message)
         ]
     );
     die();
+}
+
+function db(){
+    static $database = null;
+    if($database === null){
+        $config = require base_path("./config/database.php");
+        $database = new Database($config['connections'][$config['default']]);
+    }
+    return $database;
 }
