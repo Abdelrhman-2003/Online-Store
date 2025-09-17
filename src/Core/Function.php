@@ -42,9 +42,35 @@ function abort(int $code, string $message)
     die();
 }
 
-function db(){
+function redirect($path, $code = 200)
+{
+    http_response_code($code);
+    header("Location: {$path}");
+    die();
+}
+
+function errorLog($error, $file, $line)
+{
+    error_log(
+        "[Time] " . date('Y-m-d H:i:s') .  " | " .
+            "[Error] " . $error .  " | " .
+            "[File] " . $file .  " | " .
+            "[Line] " . $line .   "\n",
+        3,
+        __DIR__ . "/../../logs/error.log"
+    );
+}
+
+function serverError($error, $file, $line)
+{
+    errorLog($error, $file, $line);
+    abort(500, "Something went wrong, please try again later");
+}
+
+function db()
+{
     static $database = null;
-    if($database === null){
+    if ($database === null) {
         $config = require base_path("./config/database.php");
         $database = new Database($config['connections'][$config['default']]);
     }
