@@ -10,4 +10,16 @@ class Validation
         $value = stripslashes($value);
         return strlen($value) >= $min && strlen($value) <= $max;
     }
+
+    public static function imageValidate(string $image)
+    {
+        $extension = ["png", "jpg", "jpeg"];
+        $path = pathinfo($image, PATHINFO_EXTENSION);
+
+
+        if (! in_array($path, $extension)) {
+            return false;
+        }
+        return true;
+    }
 }
