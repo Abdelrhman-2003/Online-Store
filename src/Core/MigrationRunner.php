@@ -17,7 +17,7 @@ class MigrationRunner
         db()->execute("
             CREATE TABLE IF NOT EXISTS migrations (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                migration_name VARCHAR(255) NOT NULL,
+                migration_name VARCHAR(255) NOT NULL UNIQUE,
                 batch INT NOT NULL
             )
         ");
