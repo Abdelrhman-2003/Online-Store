@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Core\Exceptions\FileNotFoundException;
+
 class MigrationRunner
 {
     public function __construct(protected $migrationsPath)
@@ -57,7 +59,9 @@ class MigrationRunner
             if (in_array($migrationName, $ran)) {
                 continue;
             }
-
+            if (! file_exists($file)) {
+                throw new FileNotFoundException("File Not Found!");
+            }
             require_once $file;
 
             $className = $this->resolveClassName($migrationName);
@@ -109,6 +113,9 @@ class MigrationRunner
 
             $file = $this->migrationsPath . "/" . $migrationName . ".php";
 
+            if (! file_exists($file)) {
+                throw new FileNotFoundException("File Not Found!");
+            }
             require_once $file;
 
             $className = $this->resolveClassName($migrationName);
@@ -121,7 +128,7 @@ class MigrationRunner
                 "DELETE FROM migrations WHERE migration_name = ?",
                 [$migrationName]
             );
-            
+
             echo "Rolled back: $migrationName\n";
         }
     }
