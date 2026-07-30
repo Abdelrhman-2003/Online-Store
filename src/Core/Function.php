@@ -2,6 +2,7 @@
 
 use App\Core\Database;
 use App\Core\Exceptions\FileNotFoundException;
+use App\Core\MigrationRunner;
 use App\Http\Validation\ImageValidation;
 
 function dd($value)
@@ -147,4 +148,31 @@ function imageValidation()
         $image = new ImageValidation();
     }
     return $image;
+}
+
+function migCommand($command)
+{
+    $runner = new MigrationRunner("src/Database/Migrations");
+
+    switch ($command) {
+        case "run":
+            $runner->run();
+            break;
+
+        case "rollback":
+            $runner->rollBack();
+            break;
+
+        case null:
+            echo "Usage:
+     command [arguments]
+
+Available Commands:
+   run          Migrates new database upgrades
+   rollback     Rollbacks the last migration";
+            break;
+
+            default :
+            echo "Unknown Command : {$command}";
+    }
 }
