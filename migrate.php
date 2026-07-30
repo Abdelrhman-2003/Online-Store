@@ -15,7 +15,11 @@ try {
 } catch (QueryException $e) {
     errorLog($e->getMessage(), $e->getFile(), $e->getLine());
     echo "error is found, Check error.log";
+    exit(1);
 } catch (Exception $e) {
     errorLog($e->getMessage(), $e->getFile(), $e->getLine());
     echo "error is found, Check error.log";
+    exit(1);
+} finally {
+    db()->disConnect();
 }
