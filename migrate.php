@@ -12,7 +12,14 @@ $runner = new MigrationRunner("src/Database/Migrations");
 $command = $argv[1] ?? null;
 
 try {
-    if (strtolower($command) === "rollback") {
+    if ($command == null) {
+echo "Usage:
+     command [arguments]
+
+Available Commands:
+   run          Migrates new database upgrades
+   rollback     Rollbacks the last migration";
+    } elseif (strtolower($command) == "rollback") {
         $runner->rollBack();
     } else {
         $runner->run();
