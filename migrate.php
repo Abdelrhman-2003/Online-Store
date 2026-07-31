@@ -9,6 +9,7 @@ use App\Core\Exceptions\QueryException;
 use App\Core\MigrationRunner;
 
 $command = $argv[1] ?? null;
+$fileName = $argv[2] ?? null;
 
 try {
     migCommand($command);
