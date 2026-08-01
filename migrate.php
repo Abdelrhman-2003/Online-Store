@@ -8,12 +8,11 @@ require "src/Core/MigrationCreator.php";
 
 use App\Core\Exceptions\QueryException;
 
-
 $command = $argv[1] ?? null;
-$fileName = $argv[2] ?? null;
+$argTwo = $argv[2] ?? null;
 
 try {
-    migCommand($command , $fileName);
+    migCommand($command , $argTwo);
 } catch (QueryException $e) {
     errorLog($e->getMessage(), $e->getFile(), $e->getLine());
     echo "error is found, Check error.log";

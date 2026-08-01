@@ -151,10 +151,9 @@ function imageValidation()
     return $image;
 }
 
-function migCommand($command, $fileName = null)
+function migCommand($command, $argTwo = null)
 {
     $runner = new MigrationRunner("src/Database/Migrations");
-    $createMigrationFile = new MigrationCreator($fileName, "src/Database/Migrations");
 
     switch ($command) {
         case "run":
@@ -166,7 +165,7 @@ function migCommand($command, $fileName = null)
             exit(0);
 
         case "make":
-            $createMigrationFile->make();
+            (new MigrationCreator($argTwo , "src/Database/Migrations"))->make();
             exit(0);
 
         case null:
@@ -189,7 +188,6 @@ Available Commands:
         $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
         $words = explode('_', $withoutTimestamp);
         $words = array_map('ucfirst', $words);
-
         return implode('', $words);
     }
 
@@ -198,6 +196,5 @@ Available Commands:
         $file = basename($file, ".php");
         $file = explode("_", $file);
         $file = array_slice($file, 4, count($file) - 1);
-        $file = implode("_", $file);
-            return $file;
+        return implode("_", $file);
     }
