@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Core\Exceptions\DirectoryNotFoundException;
+
 class MigrationCreator
 {
     private string $migrationFileName;
@@ -21,6 +23,9 @@ class MigrationCreator
 
     private function migrationFileExists(): bool
     {
+        if(! is_dir($this->migrationsPath)){
+            throw new DirectoryNotFoundException("Directory Of Migration Path Not Found..!");
+        }
         $files = glob($this->migrationsPath . '/*.php');
 
         foreach ($files as $file) {
