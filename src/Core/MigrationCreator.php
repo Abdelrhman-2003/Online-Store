@@ -47,7 +47,8 @@ class MigrationCreator
             $migrationFile = date("Y_m_d_His") . "_{$this->fileName}";
             $this->migrationFileName = "src/Database/Migrations/$migrationFile.php";
             $className = resolveClassName($this->fileName);
-            $this->contentOfMigrationFile =  "<?php
+            $this->contentOfMigrationFile =  <<<PHP
+            <?php
         
 namespace App\Database\Migrations;
 
@@ -57,7 +58,9 @@ class {$className} extends Migration
 {
     public function up(): void {}
     public function down(): void {}
-}";
+    }
+    }
+PHP;
         }
     }
 }
