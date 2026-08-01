@@ -2,6 +2,7 @@
 
 use App\Core\Database;
 use App\Core\Exceptions\FileNotFoundException;
+use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
 use App\Http\Validation\ImageValidation;
 
@@ -150,9 +151,10 @@ function imageValidation()
     return $image;
 }
 
-function migCommand($command)
+function migCommand($command, $fileName = null)
 {
     $runner = new MigrationRunner("src/Database/Migrations");
+    $createMigrationFile = new MigrationCreator($fileName, "src/Database/Migrations");
 
     switch ($command) {
         case "run":
@@ -161,6 +163,10 @@ function migCommand($command)
 
         case "rollback":
             $runner->rollBack();
+            exit(0);
+
+        case "make":
+            $createMigrationFile->make();
             exit(0);
 
         case null:
@@ -175,5 +181,23 @@ Available Commands:
         default:
             echo "Unknown Command : {$command}";
             exit(1);
-            }
+    }
 }
+
+    function resolveClassName(string $migrationName): string
+    {
+        $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
+        $words = explode('_', $withoutTimestamp);
+        $words = array_map('ucfirst', $words);
+
+        return implode('', $words);
+    }
+
+    function sterilizeTheFileNameOfTheMigration(string $file) : string
+    {
+        $file = basename($file, ".php");
+        $file = explode("_", $file);
+        $file = array_slice($file, 4, count($file) - 1);
+        $file = implode("_", $file);
+            return $file;
+    }

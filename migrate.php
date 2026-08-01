@@ -4,15 +4,16 @@ require "src/Core/Database.php";
 require "src/Core/Migration.php";
 require "src/Core/Exceptions/QueryException.php";
 require "src/Core/MigrationRunner.php";
+require "src/Core/MigrationCreator.php";
 
 use App\Core\Exceptions\QueryException;
-use App\Core\MigrationRunner;
+
 
 $command = $argv[1] ?? null;
 $fileName = $argv[2] ?? null;
 
 try {
-    migCommand($command);
+    migCommand($command , $fileName);
 } catch (QueryException $e) {
     errorLog($e->getMessage(), $e->getFile(), $e->getLine());
     echo "error is found, Check error.log";
