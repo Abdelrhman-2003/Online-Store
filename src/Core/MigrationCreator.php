@@ -6,18 +6,18 @@ use App\Core\Exceptions\DirectoryNotFoundException;
 
 class MigrationCreator
 {
-    private string $migrationFileName;
+    private string $migrationFilePath;
     private string  $contentOfMigrationFile;
 
-    public function __construct(protected ?string $fileName, protected string $migrationsPath)
+    public function __construct(protected ?string $migrationName, protected string $migrationsPath)
     {
         //
     }
 
     public function make(): void
     {
-        $this->handleMakeCommand($this->fileName);
-        file_put_contents($this->migrationFileName, $this->contentOfMigrationFile);
+        $this->handleMakeCommand($this->migrationName);
+        file_put_contents($this->migrationFilePath, $this->contentOfMigrationFile);
         exit(0);
     }
 
@@ -30,7 +30,7 @@ class MigrationCreator
 
         foreach ($files as $file) {
             $currentFile = sterilizeTheFileNameOfTheMigration($file);
-            if ($currentFile === $this->fileName) {
+            if ($currentFile === $this->migrationName) {
                 return false;
             }
         }
@@ -49,11 +49,11 @@ class MigrationCreator
             echo "This file exists: {$file}. \nThe Migration File cannot be duplicated again!";
             exit(1);
         } else {
-            $migrationFile = date("Y_m_d_His") . "_{$this->fileName}";
-            $this->migrationFileName = "src/Database/Migrations/$migrationFile.php";
-            $className = resolveClassName($this->fileName);
+            $migrationFileName = date("Y_m_d_His") . "_{$this->migrationName}";
+            $this->migrationFilePath = $this->migrationsPath. "/" .$migrationFileName.".php";
+            $className = resolveClassName($this->migrationName);
             $this->contentOfMigrationFile =  <<<PHP
-            <?php
+<?php
         
 namespace App\Database\Migrations;
 
@@ -63,8 +63,7 @@ class {$className} extends Migration
 {
     public function up(): void {}
     public function down(): void {}
-    }
-    }
+}
 PHP;
         }
     }
