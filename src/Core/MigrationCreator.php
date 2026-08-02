@@ -18,7 +18,6 @@ class MigrationCreator
     {
         $this->handleMakeCommand($this->migrationName);
         file_put_contents($this->migrationFilePath, $this->contentOfMigrationFile);
-        exit(0);
     }
 
     private function migrationFileExists(): bool
@@ -29,7 +28,7 @@ class MigrationCreator
         $files = glob($this->migrationsPath . '/*.php');
 
         foreach ($files as $file) {
-            $currentFile = sterilizeTheFileNameOfTheMigration($file);
+            $currentFile = sterilizeMigrationFileName($file);
             if ($currentFile === $this->migrationName) {
                 return false;
             }

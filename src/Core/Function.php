@@ -165,7 +165,7 @@ function migCommand($command, $argTwo = null)
             exit(0);
 
         case "make":
-            (new MigrationCreator($argTwo , "src/Database/Migrations"))->make();
+            (new MigrationCreator($argTwo, "src/Database/Migrations"))->make();
             exit(0);
 
         case null:
@@ -183,18 +183,35 @@ Available Commands:
     }
 }
 
-    function resolveClassName(string $migrationName): string
-    {
-        $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
-        $words = explode('_', $withoutTimestamp);
-        $words = array_map('ucfirst', $words);
-        return implode('', $words);
-    }
+function resolveClassName(string $migrationName): string
+{
+    $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
+    $words = explode('_', $withoutTimestamp);
+    $words = array_map('ucfirst', $words);
+    return implode('', $words);
+}
 
-    function sterilizeTheFileNameOfTheMigration(string $file) : string
-    {
-        $file = basename($file, ".php");
-        $file = explode("_", $file);
-        $file = array_slice($file, 4, count($file) - 1);
-        return implode("_", $file);
+function sterilizeMigrationFileName(string $file): string
+{
+    $file = basename($file, ".php");
+    $file = explode("_", $file);
+    $file = array_slice($file, 4, count($file) - 1);
+    return implode("_", $file);
+}
+
+function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
+{
+    try {
+        migCommand($command, $argTwo);
+    } catch (RuntimeException $e) {
+        errorLog($e->getMessage(), $e->getFile(), $e->getLine());
+        echo "error is found, Check error.log";
+        exit(1);
+    } catch (Exception $e) {
+        errorLog($e->getMessage(), $e->getFile(), $e->getLine());
+        echo "error is found, Check error.log";
+        exit(1);
+    } finally {
+        db()->disConnect();
     }
+}
