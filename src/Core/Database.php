@@ -29,15 +29,18 @@ class Database
         }
     }
 
-    public function fetchAll(string $sql, string $class , array $params = [])
+    public function fetchAll(string $sql, string $class )
     {
-        $this->query($sql, $params);
+        $this->query($sql);
         return $this->statement->fetchAll(PDO::FETCH_CLASS, $class);
     }
 
-    public function fetch(string $sql, array $params = [])
+    public function fetch(string $sql , array $params , string $class = null)
     {
         $this->query($sql, $params);
+    if($class){
+        $this->statement->setFetchMode(PDO::FETCH_CLASS , $class);
+    }
         return $this->statement->fetch();
     }
 

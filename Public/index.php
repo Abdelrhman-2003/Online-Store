@@ -19,7 +19,7 @@ use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Model;
 use App\Core\Router;
 
- Model::all();
+ Model::findOrFail(265);
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];
