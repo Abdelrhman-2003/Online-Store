@@ -46,4 +46,26 @@ class Model
     {
         return db()->execute("DELETE FROM " . static::$table . " where id = ?", [$id]);
     }
+
+    public  function save(): void
+    {
+        if (! isset($this->attributes['id'])) {
+            $keys = array_keys($this->attributes);
+
+            db()->execute(
+                "INSERT INTO " . static::$table . " (" . implode(', ', $keys) . ")" .
+                    " VALUES (" . implode(', ', array_fill(0, count($keys), '?')) . ")",
+                array_values($this->attributes)
+            );
+        } else {
+            $keys = array_keys($this->attributes);
+            $attr = $this->attributes;
+            unset($attr['id']);
+            $setWithoutId = implode(', ', array_map(fn($key) => "`$key` = ?", $attr));
+            db()->execute(
+                "UPDATE " . static::$table . " SET $setWithoutId WHERE id = ?",
+                array_values($this->attributes)
+            );
+        }
+    }
 }

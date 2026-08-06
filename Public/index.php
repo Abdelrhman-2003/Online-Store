@@ -24,9 +24,6 @@ use App\Models\Category;
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];
 
-$model = new Model;
-dd($model->save());
-
 $router = new Router();
 
 require base_path("config/routes.php");
