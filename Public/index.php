@@ -18,11 +18,14 @@ spl_autoload_register(function ($class) {
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Model;
 use App\Core\Router;
+use App\Models\Category;
 
- Model::findOrFail(265);
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];
+
+$model = new Model;
+dd($model->save());
 
 $router = new Router();
 

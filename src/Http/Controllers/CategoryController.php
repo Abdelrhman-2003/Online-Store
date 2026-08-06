@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -44,12 +45,12 @@ class CategoryController extends Controller
         }
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
 
-        db()->execute("INSERT INTO categories (categoryName , categoryDescription , categoryImage) 
-        VALUE (?, ?, ?)", [
-            $attributes['category-name'],
-            $attributes["category-desc"],
-            $attributes['category-name'] . "." . $extenstion
-        ]);
+        $category = new Category;
+        $category->categoryName = $attributes["category-name"];
+        $category->categorDescription = $attributes["category-desc"];
+        $category->categoryImage = $attributes['category-name'] . "." . $extenstion;
+        $category->save(); 
+       
         Session::flash("Success-Message", $attributes['category-name'] . " Added Successfully");
         redirect("/categories");
     }
