@@ -96,8 +96,8 @@ class ProductController extends Controller
     // Database helper function Query
     private function editProduct(array $attributes, ?string $extension)
     {
-        product()->productName = $attributes["product-name"];
-        product()->productImage = $attributes["product-name"] . "." . $extension;
+        product()->productName = $attributes["product_name"];
+        product()->productImage = $attributes["product_name"] . "." . $extension;
         product()->productDescription = $attributes["description"];
         product()->id = $attributes["id"];
         product()->save();
@@ -209,7 +209,7 @@ class ProductController extends Controller
         product()->productImage = $attributes["product_name"] . "." . $extension;
         product()->productDescription = $attributes["description"];
         product()->productPrice = abs($attributes["price"]);
-        product()->categoryId = $attributes["id"];
+        product()->category_id = $attributes["id"];
         product()->save();
 
         $lastID = db()->getLastId();

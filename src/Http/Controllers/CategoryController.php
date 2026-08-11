@@ -10,12 +10,11 @@ class CategoryController extends Controller
 {
     public function show(int $id)
     {
-        view("Category/show", [
+        $this->render("Category/show", [
             "products" => $this->getProducts($id),
             "category" => $this->getCategory($id),
             "categories" => $this->getCategories()
         ]);
-        die();
     }
 
     public function index()
@@ -44,11 +43,10 @@ class CategoryController extends Controller
         }
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
 
-        $category = new Category;
-        $category->categoryName = $attributes["category-name"];
-        $category->categoryDescription = $attributes["category-desc"];
-        $category->categoryImage = $attributes['category-name'] . "." . $extenstion;
-        $category->save();
+        category()->categoryName = $attributes["category-name"];
+        category()->categoryDescription = $attributes["category-desc"];
+        category()->categoryImage = $attributes['category-name'] . "." . $extenstion;
+        category()->save();
 
         Session::flash("Success-Message", $attributes['category-name'] . " Added Successfully");
         redirect("/categories");
@@ -114,5 +112,10 @@ class CategoryController extends Controller
     private function getCategoryImage(int $id)
     {
         return  db()->fetch("SELECT categoryImage FROM categories where id = ?", [$id]);
+    }
+
+    private function getProducts(int $id)
+    {
+        return db()->fetchAll("SELECT * FROM products where category_id = ?" , [$id]);
     }
 }

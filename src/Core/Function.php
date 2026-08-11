@@ -6,7 +6,9 @@ use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
 use App\Http\Validation\ImageValidation;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 
 function dd($value)
 {
@@ -234,7 +236,7 @@ function product(){
 function size(){
     static $size = null;
     if($size === null){
-        $size = new Product;
+        $size = new Size;
     }
     return $size;
 }
@@ -242,7 +244,7 @@ function size(){
 function color(){
     static $color = null;
     if($color === null){
-        $color = new Product;
+        $color = new Color;
     }
     return $color;
 }

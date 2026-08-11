@@ -21,7 +21,7 @@ class Model
 
     public static function all(): array
     {
-        return db()->fetchAll("SELECT * FROM " . static::$table, static::class);
+        return db()->fetchAll("SELECT * FROM " . static::$table, [] , static::class);
     }
 
     public static function find(int $id): static | bool | null

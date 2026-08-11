@@ -29,10 +29,10 @@ class Database
         }
     }
 
-    public function fetchAll(string $sql, string $class = null )
+    public function fetchAll(string $sql , array $params = [], string $class = null )
     {
-        $this->query($sql);
-    
+        $this->query($sql , $params);
+
         return $this->statement->fetchAll(PDO::FETCH_CLASS, $class);
     }
 

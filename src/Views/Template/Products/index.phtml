@@ -49,46 +49,46 @@ require base_path("Views/Partials/head.phtml");
                             <tr class="hover:bg-gray-50 transition">
                                 <!-- Image -->
                                 <td class="px-6 py-4">
-                                    <img src="/assets/images/Products/<?= htmlspecialchars($product['productImage']) ?>"
+                                    <img src="/assets/images/Products/<?= htmlspecialchars($product->productImage) ?>"
                                         alt="photo"
                                         class="h-16 w-16 rounded-lg object-cover shadow-sm">
                                 </td>
 
                                 <!-- Product Name -->
                                 <td class="px-6 py-4 font-medium text-gray-800">
-                                    <?= htmlspecialchars($product['productName']) ?>
+                                    <?= htmlspecialchars($product->productName) ?>
                                 </td>
 
                                 <!-- Description -->
                                 <td class="px-6 py-4 max-w-xs truncate text-gray-600">
-                                    <?= htmlspecialchars($product['productDescription']) ?>
+                                    <?= htmlspecialchars($product->productDescription) ?>
                                 </td>
 
                                 <!-- Category -->
                                 <td class="px-6 py-4">
                                     <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700">
-                                        <?= htmlspecialchars($product['categoryName']) ?>
+                                    <?= htmlspecialchars($product->productName) ?>
                                     </span>
                                 </td>
 
                                 <!-- Price -->
                                 <td class="px-6 py-4 font-semibold text-gray-900">
-                                    $<?= htmlspecialchars($product['productPrice']) ?>
+                                    $<?= htmlspecialchars($product->productPrice) ?>
                                 </td>
 
                                 <!-- Action Buttons -->
                                 <td class="px-6 py-4 text-center space-x-2">
-                                    <a href="/products/show/<?= htmlspecialchars($product['id']) ?>"
+                                    <a href="/products/show/<?= htmlspecialchars($product->id) ?>"
                                         class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 transition">
                                         Show
                                     </a>
-                                    <a href="/products/edit/<?= htmlspecialchars($product['id']) ?>"
+                                    <a href="/products/edit/<?= htmlspecialchars($product->id) ?>"
                                         class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow hover:bg-yellow-600 transition">
                                         Edit
                                     </a>
                                     <form method="POST" action="/products/destroy">
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="id" value="<?= $product['id'] ?>">
+                                        <input type="hidden" name="id" value="<?= $product->id ?>">
                                         <button class="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow hover:bg-red-600 transition">
                                             Delete
                                         </button>
