@@ -12,7 +12,8 @@ $command = $argv[1] ?? null;
 
 try {
     migCommand($command);
-} catch (QueryException $e) {
+    exit(0);
+    } catch (QueryException $e) {
     errorLog($e->getMessage(), $e->getFile(), $e->getLine());
     echo "error is found, Check error.log";
     exit(1);
