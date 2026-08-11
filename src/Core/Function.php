@@ -158,11 +158,9 @@ function migCommand($command, $argTwo = null)
     switch ($command) {
         case "run":
             $runner->run();
-            exit(0);
 
         case "rollback":
             $runner->rollBack();
-            exit(0);
 
         case "make":
             (new MigrationCreator($argTwo, "src/Database/Migrations"))->make();
@@ -175,7 +173,6 @@ function migCommand($command, $argTwo = null)
 Available Commands:
    run          Migrates new database upgrades
    rollback     Rollbacks the last migration";
-            exit(0);
 
         default:
             echo "Unknown Command : {$command}";
