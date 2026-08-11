@@ -29,17 +29,20 @@ class Database
         }
     }
 
-    public function fetchAll(string $sql, string $class )
+    public function fetchAll(string $sql, string $class = null )
     {
         $this->query($sql);
+    
         return $this->statement->fetchAll(PDO::FETCH_CLASS, $class);
     }
 
-    public function fetch(string $sql , array $params , string $class = null)
+    public function fetch(string $sql , array $params = [] , string $class = null)
     {
         $this->query($sql, $params);
     if($class){
         $this->statement->setFetchMode(PDO::FETCH_CLASS , $class);
+    }else{
+        $this->statement->setFetchMode(PDO::FETCH_ASSOC);
     }
         return $this->statement->fetch();
     }

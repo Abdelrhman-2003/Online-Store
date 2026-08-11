@@ -5,6 +5,8 @@ use App\Core\Exceptions\FileNotFoundException;
 use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
 use App\Http\Validation\ImageValidation;
+use App\Models\Category;
+use App\Models\Product;
 
 function dd($value)
 {
@@ -158,15 +160,12 @@ function migCommand($command, $argTwo = null)
     switch ($command) {
         case "run":
             $runner->run();
-            exit(0);
 
         case "rollback":
             $runner->rollBack();
-            exit(0);
 
         case "make":
             (new MigrationCreator($argTwo, "src/Database/Migrations"))->make();
-            exit(0);
 
         case null:
             echo "Usage:
@@ -175,7 +174,6 @@ function migCommand($command, $argTwo = null)
 Available Commands:
    run          Migrates new database upgrades
    rollback     Rollbacks the last migration";
-            exit(0);
 
         default:
             echo "Unknown Command : {$command}";
@@ -203,6 +201,7 @@ function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
 {
     try {
         migCommand($command, $argTwo);
+        exit(0);
     } catch (RuntimeException $e) {
         errorLog($e->getMessage(), $e->getFile(), $e->getLine());
         echo "error is found, Check error.log";
@@ -214,4 +213,36 @@ function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
     } finally {
         db()->disConnect();
     }
+}
+
+function category(){
+    static $category = null;
+    if($category === null){
+        $category = new Category;
+    }
+    return $category;
+}
+
+function product(){
+    static $product = null;
+    if($product === null){
+        $product = new Product;
+    }
+    return $product;
+}
+
+function size(){
+    static $size = null;
+    if($size === null){
+        $size = new Product;
+    }
+    return $size;
+}
+
+function color(){
+    static $color = null;
+    if($color === null){
+        $color = new Product;
+    }
+    return $color;
 }

@@ -17,15 +17,15 @@ class HomeController extends Controller
 
     private function getCategories()
     {
-        return db()->fetchAll("SELECT * FROM categories");
+        return category()->all();
     }
 
     private function getProducts()
     {
-        $products = db()->fetchAll("SELECT * FROM products");
+        $products = product()->all();
         $productsByCategorId = [];
         foreach ($products as $product) {
-            $productsByCategorId[$product['category_id']][] = $product;
+            $productsByCategorId[$product->category_id][] = $product;
         }
         return $productsByCategorId;
     }

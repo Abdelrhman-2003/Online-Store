@@ -6,12 +6,8 @@ use App\Core\Exceptions\RecordNotFoundException;
 
 class Model
 {
-    protected static string $table = "categories";
-    public  array $attributes = [
-        "id" => 1,
-        "categoryName" => "klsdjf",
-        "categoryPrice" => "565"
-    ];
+    protected static string $table ;
+    public  array $attributes = [];
 
     public function __set($key, $value)
     {
@@ -28,15 +24,15 @@ class Model
         return db()->fetchAll("SELECT * FROM " . static::$table, static::class);
     }
 
-    public static function find(int $id): ?static
+    public static function find(int $id): static | bool | null
     {
         return db()->fetch("SELECT * FROM " . static::$table . " WHERE id = ?", [$id], static::class);
     }
 
-    public static function findOrFail(int $id): ?static
+    public static function findOrFail(int $id): static | bool | null
     {
-        $record = db()->fetch("SELECT * FROM " . static::$table . " WHERE id = ?", [$id], static::class);
-        if ($record === false) {
+        $record = static::find($id);
+        if ($record === null) {
             throw new RecordNotFoundException("Record With Id: {$id}, Not Found..!");
         }
         return $record;
@@ -55,16 +51,18 @@ class Model
             db()->execute(
                 "INSERT INTO " . static::$table . " (" . implode(', ', $keys) . ")" .
                     " VALUES (" . implode(', ', array_fill(0, count($keys), '?')) . ")",
-                array_values($this->attributes)
+                array_values($this->attributes)  
             );
+                    $this->attributes['id'] =  db()->getLastId();
         } else {
             $keys = array_keys($this->attributes);
             $attr = $this->attributes;
             unset($attr['id']);
-            $setWithoutId = implode(', ', array_map(fn($key) => "`$key` = ?", $attr));
+            $keys = array_keys($attr);
+            $setWithoutId = implode(', ', array_map(fn($key) => "`$key` = ?", $keys));
             db()->execute(
                 "UPDATE " . static::$table . " SET $setWithoutId WHERE id = ?",
-                array_values($this->attributes)
+                [...array_values($attr) , $this->attributes['id']]
             );
         }
     }

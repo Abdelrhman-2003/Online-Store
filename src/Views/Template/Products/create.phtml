@@ -34,12 +34,12 @@ require base_path("Views/Partials/head.phtml"); ?>
         </div>
         <!-- Category Color -->
         </div>
-        <?php if (checkColor($category['categoryName'])) :  ?>
+        <?php if (checkColor($category->categoryName)) :  ?>
             <div>
                 <label class="block text-sm font-medium text-indigo-600">Color</label>
                 <div class="flex gap-2 mt-2 flex-wrap">
                     <?php foreach ($colors as $color) : ?>
-                        <?php $bg = strtolower($color['colorName']);
+                        <?php $bg = strtolower($color->colorName);
                         $bgNum =  ($bg === "black" || $bg === "white") ? $bg : $bg . "-500"
                         ?>
                         <input type="checkbox" name="colors[]" value="<?= $bg ?>" id="color-<?= $bg ?>" class="hidden peer/<?= $bg ?>">
@@ -54,12 +54,12 @@ require base_path("Views/Partials/head.phtml"); ?>
             </div>
         <?php endif; ?>
         <!-- Category Size -->
-        <?php if (checkSize($category['categoryName'])) : ?>
+        <?php if (checkSize($category->categoryName)) : ?>
             <div>
                 <label class="block text-sm font-medium text-indigo-600">Sizes</label>
                 <div class="flex flex-wrap gap-2 mt-2">
                     <?php foreach ($sizes as $size) : ?>
-                        <input type="checkbox" name="sizes[]" value="<?= $size['sizeName'] ?>" id="size-<?= $size['sizeName'] ?>" class="hidden peer/<?= $size['sizeName'] ?>">
+                        <input type="checkbox" name="sizes[]" value="<?= $size->sizeName ?>" id="size-<?= $size->sizeName ?>" class="hidden peer/<?= $size['sizeName'] ?>">
                         <label for="size-<?= $size['sizeName'] ?>"
                             class="px-3 py-1 rounded-lg border border-gray-300 text-indigo-700 cursor-pointer peer-checked/<?= $size['sizeName'] ?>:bg-indigo-600 peer-checked/<?= $size['sizeName'] ?>:text-white">
                             <?= $size['sizeName'] ?>
@@ -93,7 +93,5 @@ require base_path("Views/Partials/head.phtml"); ?>
             </button>
         </div>
     </form>
-
 </body>
-
 </html>

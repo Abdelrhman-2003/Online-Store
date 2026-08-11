@@ -96,14 +96,11 @@ class ProductController extends Controller
     // Database helper function Query
     private function editProduct(array $attributes, ?string $extension)
     {
-        db()->execute("UPDATE products set productName = ? , productImage = ? , productDescription = ? , productPrice = ? 
-        where id = ?", [
-            $attributes['product_name'],
-            $attributes['product_name'] . "." . $extension,
-            $attributes['description'],
-            abs($attributes['price']),
-            $attributes['id']
-        ]);
+        product()->productName = $attributes["product-name"];
+        product()->productImage = $attributes["product-name"] . "." . $extension;
+        product()->productDescription = $attributes["description"];
+        product()->id = $attributes["id"];
+        product()->save();
 
         $colors = $attributes['colors'] ?? [];
         $sizes = $attributes['sizes'] ?? [];
@@ -131,12 +128,12 @@ class ProductController extends Controller
 
     private function deleteProduct(int $id)
     {
-        db()->execute("DELETE FROM products where id = ?", [$id]);
+        product()->delete($id);
     }
 
     private function getCategories(): array
     {
-        return db()->fetchAll("SELECT * FROM categories");
+        return category()->all();
     }
 
     private function getCategoryNameAndId(int $id): array
@@ -165,12 +162,12 @@ class ProductController extends Controller
 
     private function getColors(): array
     {
-        return db()->fetchAll("SELECT * FROM colors");
+        return color()->all();
     }
 
     private function getSizes(): array
     {
-        return db()->fetchAll("SELECT * FROM sizes");
+        return size()->all();
     }
 
     private function getProductColors(int $id): array
@@ -208,14 +205,12 @@ class ProductController extends Controller
 
     private function createProduct(array $attributes, string $extension)
     {
-        db()->execute("INSERT INTO products(`productName`, `productImage`, `productDescription`, `productPrice`, `category_id`) 
-        VALUES (?, ?, ?, ?, ? )", [
-            $attributes['product_name'],
-            $attributes['product_name'] . "." . $extension,
-            $attributes['description'],
-            abs($attributes['price']),
-            $attributes['id']
-        ]);
+        product()->productName  = $attributes["product_name"];
+        product()->productImage = $attributes["product_name"] . "." . $extension;
+        product()->productDescription = $attributes["description"];
+        product()->productPrice = abs($attributes["price"]);
+        product()->categoryId = $attributes["id"];
+        product()->save();
 
         $lastID = db()->getLastId();
 
