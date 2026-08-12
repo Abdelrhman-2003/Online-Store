@@ -8,6 +8,8 @@ use App\Http\Validation\ImageValidation;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
 use App\Models\Size;
 
 function dd($value)
@@ -199,7 +201,7 @@ function sterilizeMigrationFileName(string $file): string
     return implode("_", $file);
 }
 
-function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
+function errorHandlingAtMigrateFile(string $command, ?string $argTwo)
 {
     try {
         migCommand($command, $argTwo);
@@ -217,34 +219,56 @@ function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
     }
 }
 
-function category(){
+function category()
+{
     static $category = null;
-    if($category === null){
+    if ($category === null) {
         $category = new Category;
     }
     return $category;
 }
 
-function product(){
+function product()
+{
     static $product = null;
-    if($product === null){
+    if ($product === null) {
         $product = new Product;
     }
     return $product;
 }
 
-function size(){
+function size()
+{
     static $size = null;
-    if($size === null){
+    if ($size === null) {
         $size = new Size;
     }
     return $size;
 }
 
-function color(){
+function color()
+{
     static $color = null;
-    if($color === null){
+    if ($color === null) {
         $color = new Color;
     }
     return $color;
+}
+
+function productColor()
+{
+    static $productColor = null;
+    if ($productColor == null) {
+        $productColor = new ProductColor();
+    }
+    return $productColor;
+}
+
+function productSize()
+{
+    static $productSize = null;
+    if ($productSize == null) {
+        $productSize = new ProductSize();
+    }
+    return $productSize;
 }
