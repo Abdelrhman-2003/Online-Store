@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-require base_path("./Core/Session.php");
-require "Controller.php";
-
 class HomeController extends Controller
 {
     public function index()

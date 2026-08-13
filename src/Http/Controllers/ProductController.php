@@ -98,6 +98,7 @@ class ProductController extends Controller
     {
         product()->productName = $attributes["product_name"];
         product()->productImage = $attributes["product_name"] . "." . $extension;
+        product()->productPrice = abs($attributes['price']);
         product()->productDescription = $attributes["description"];
         product()->id = $attributes["id"];
         product()->save();
@@ -109,20 +110,18 @@ class ProductController extends Controller
 
         foreach ($colors as $color) {
             $colorID = $this->getColorID($color);
-            db()->execute("INSERT INTO product_color (`color_id` , `product_id`) VALUES (? , ?)", [
-                $colorID['id'],
-                $attributes['id']
-            ]);
+            productColor()->product_id = $attributes['id'];
+            productColor()->color_id = $colorID['id'];
+            productColor()->save();
         }
 
         db()->execute("DELETE FROM product_size where product_id = ?", [$attributes['id']]);
 
         foreach ($sizes as $size) {
             $sizeID = $this->getSizeID($size);
-            db()->execute("INSERT INTO product_size (`size_id` , `product_id`) VALUES (? , ?)", [
-                $sizeID['id'],
-                $attributes['id']
-            ]);
+            productSize()->product_id = $attributes['id'];
+            productSize()->size_id = $sizeID['id'];
+            productsize()->save();
         }
     }
 
@@ -219,7 +218,6 @@ class ProductController extends Controller
 
         foreach ($colors as $color) {
             $colorID = $this->getColorID($color);
-
             productColor()->product_id = $lastID;
             productColor()->color_id = $colorID['id'];
             productColor()->save();

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
-use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -114,7 +114,10 @@ class CategoryController extends Controller
 
     private function getProducts(int $id)
     {
-        $category = Category::find($id);
+        $category = category()->find($id);
+        if (! $category) {
+            throw new RecordNotFoundException("Record With Id: {$id}, Not Found..!");
+        }
         return $category->products();
     }
 }
