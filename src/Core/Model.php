@@ -6,7 +6,7 @@ use App\Core\Exceptions\RecordNotFoundException;
 
 class Model
 {
-    protected static string $table ;
+    protected static string $table;
     public  array $attributes = [];
 
     public function __set($key, $value)
@@ -21,7 +21,7 @@ class Model
 
     public static function all(): array
     {
-        return db()->fetchAll("SELECT * FROM " . static::$table, [] , static::class);
+        return db()->fetchAll("SELECT * FROM " . static::$table, [], static::class);
     }
 
     public static function find(int $id): static | bool | null
@@ -51,18 +51,17 @@ class Model
             db()->execute(
                 "INSERT INTO " . static::$table . " (" . implode(', ', $keys) . ")" .
                     " VALUES (" . implode(', ', array_fill(0, count($keys), '?')) . ")",
-                array_values($this->attributes)  
+                array_values($this->attributes)
             );
-                    $this->attributes['id'] =  db()->getLastId();
+            $this->attributes['id'] =  db()->getLastId();
         } else {
-            $keys = array_keys($this->attributes);
             $attr = $this->attributes;
             unset($attr['id']);
             $keys = array_keys($attr);
             $setWithoutId = implode(', ', array_map(fn($key) => "`$key` = ?", $keys));
             db()->execute(
                 "UPDATE " . static::$table . " SET $setWithoutId WHERE id = ?",
-                [...array_values($attr) , $this->attributes['id']]
+                [...array_values($attr), $this->attributes['id']]
             );
         }
     }

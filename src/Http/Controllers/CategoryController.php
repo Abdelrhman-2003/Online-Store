@@ -83,14 +83,12 @@ class CategoryController extends Controller
 
     public function destroy(array $attributes)
     {
-
         if (!empty($this->isCategoryHaveProducts($attributes['id']))) {
             Session::flash("Success-Message", "You Can't Delete This Category Because Contain Some Products!");
         } else {
             category()->delete($attributes['id']);
             Session::flash("Success-Message", " Deleted Successfully");
         }
-
         redirect("/categories");
     }
 
@@ -116,6 +114,7 @@ class CategoryController extends Controller
 
     private function getProducts(int $id)
     {
-        return db()->fetchAll("SELECT * FROM products where category_id = ?" , [$id]);
+        $category = Category::find($id);
+        return $category->products();
     }
 }

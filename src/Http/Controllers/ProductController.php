@@ -219,17 +219,16 @@ class ProductController extends Controller
 
         foreach ($colors as $color) {
             $colorID = $this->getColorID($color);
-            db()->execute("INSERT INTO product_color (`product_id`, `color_id`) VALUES (?, ?)", [
-                $lastID,
-                $colorID['id']
-            ]);
+
+            productColor()->product_id = $lastID;
+            productColor()->color_id = $colorID['id'];
+            productColor()->save();
         }
         foreach ($sizes as $size) {
             $sizeID = $this->getSizeID($size);
-            db()->execute("INSERT INTO product_size (`product_id`, `size_id`) VALUES (?, ?)", [
-                $lastID,
-                $sizeID['id']
-            ]);
+            productSize()->product_id = $lastID;
+            productSize()->size_id = $sizeID['id'];
+            productsize()->save();
         }
     }
 }
