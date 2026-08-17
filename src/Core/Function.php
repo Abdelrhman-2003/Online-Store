@@ -2,6 +2,7 @@
 
 use App\Core\Database;
 use App\Core\Exceptions\FileNotFoundException;
+use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
 use App\Http\Validation\ImageValidation;
 
@@ -150,7 +151,7 @@ function imageValidation()
     return $image;
 }
 
-function migCommand($command)
+function migCommand($command, $argTwo = null)
 {
     $runner = new MigrationRunner("src/Database/Migrations");
 
@@ -160,6 +161,10 @@ function migCommand($command)
 
         case "rollback":
             $runner->rollBack();
+
+        case "make":
+            (new MigrationCreator($argTwo, "src/Database/Migrations"))->make();
+            exit(0);
 
         case null:
             echo "Usage:
@@ -172,5 +177,38 @@ Available Commands:
         default:
             echo "Unknown Command : {$command}";
             exit(1);
-            }
+    }
+}
+
+function resolveClassName(string $migrationName): string
+{
+    $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
+    $words = explode('_', $withoutTimestamp);
+    $words = array_map('ucfirst', $words);
+    return implode('', $words);
+}
+
+function sterilizeMigrationFileName(string $file): string
+{
+    $file = basename($file, ".php");
+    $file = explode("_", $file);
+    $file = array_slice($file, 4, count($file) - 1);
+    return implode("_", $file);
+}
+
+function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
+{
+    try {
+        migCommand($command, $argTwo);
+    } catch (RuntimeException $e) {
+        errorLog($e->getMessage(), $e->getFile(), $e->getLine());
+        echo "error is found, Check error.log";
+        exit(1);
+    } catch (Exception $e) {
+        errorLog($e->getMessage(), $e->getFile(), $e->getLine());
+        echo "error is found, Check error.log";
+        exit(1);
+    } finally {
+        db()->disConnect();
+    }
 }

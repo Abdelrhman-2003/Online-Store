@@ -35,15 +35,6 @@ class MigrationRunner
         return ($result['max_batch'] ?? 0) + 1;
     }
 
-    protected function resolveClassName(string $migrationName): string
-    {
-        $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $migrationName);
-        $words = explode('_', $withoutTimestamp);
-        $words = array_map('ucfirst', $words);
-
-        return implode('', $words);
-    }
-
     public function run(): void
     {
         $ran = $this->getRanMigrations();
@@ -64,7 +55,7 @@ class MigrationRunner
             }
             require_once $file;
 
-            $className = $this->resolveClassName($migrationName);
+            $className = resolveClassName($migrationName);
             $fullClassName = "App\\Database\\Migrations\\$className";
 
             $migration = new $fullClassName();
@@ -105,7 +96,7 @@ class MigrationRunner
 
         if ($batch === 0) {
             return;
-        }
+            }
 
         $migrations = $this->getMigrationsInBatch($batch);
 
@@ -118,7 +109,7 @@ class MigrationRunner
             }
             require_once $file;
 
-            $className = $this->resolveClassName($migrationName);
+            $className = resolveClassName($migrationName);
             $allClassName = "App\\Database\\Migrations\\$className";
 
             $migration = new $allClassName();
