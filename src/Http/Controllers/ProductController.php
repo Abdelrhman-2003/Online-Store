@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Auth;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\ProductValidation;
@@ -30,6 +31,8 @@ class ProductController extends Controller
 
     public function create(int $id): void
     {
+        Auth::require();
+
         $this->render("Products/create", [
             "errors" => $this->validated->errors ?? null,
             "category" => $this->getCategoryNameAndId($id),
@@ -41,6 +44,8 @@ class ProductController extends Controller
 
     public function store(array $attributes): void
     {
+        Auth::require();
+
         $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->create($attributes['id']);
@@ -54,6 +59,7 @@ class ProductController extends Controller
 
     public function indexCards(): void
     {
+        Auth::require();
         $this->render("Products/indexCards", [
             "categories" => $this->getCategories()
         ]);
@@ -61,6 +67,8 @@ class ProductController extends Controller
 
     public function edit(int $id)
     {
+        Auth::require();
+
         $this->render("Products/edit", [
             "errors" => $this->validated->errors ?? null,
             "categories" => $this->getCategories(),
@@ -74,6 +82,8 @@ class ProductController extends Controller
 
     public function update(array $attributes)
     {
+        Auth::require();
+
         $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->edit($attributes['id']);
@@ -88,6 +98,8 @@ class ProductController extends Controller
 
     public function destroy(array $attributes)
     {
+        Auth::require();
+
         $this->deleteProduct($attributes['id']);
         Session::flash("Success-Message", "Product Deleted Successfully");
         redirect("/products");
@@ -96,6 +108,8 @@ class ProductController extends Controller
     // Database helper function Query
     private function editProduct(array $attributes, ?string $extension)
     {
+        Auth::require();
+
         product()->productName = $attributes["product_name"];
         product()->productImage = $attributes["product_name"] . "." . $extension;
         product()->productPrice = abs($attributes['price']);
@@ -127,6 +141,8 @@ class ProductController extends Controller
 
     private function deleteProduct(int $id)
     {
+        Auth::require();
+
         product()->delete($id);
     }
 
@@ -204,6 +220,8 @@ class ProductController extends Controller
 
     private function createProduct(array $attributes, string $extension)
     {
+        Auth::require();
+        
         product()->productName  = $attributes["product_name"];
         product()->productImage = $attributes["product_name"] . "." . $extension;
         product()->productDescription = $attributes["description"];

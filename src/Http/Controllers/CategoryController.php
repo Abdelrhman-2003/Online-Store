@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Auth;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
@@ -26,6 +27,7 @@ class CategoryController extends Controller
 
     public function create()
     {
+        Auth::require();
         $this->render("Categories/create", [
             "categories" => $this->getCategories(),
         ]);
@@ -33,6 +35,8 @@ class CategoryController extends Controller
 
     public function store(array $attributes)
     {
+                Auth::require();
+
         $validated = new CategoryValidation($attributes, $_FILES);
 
         if (!empty($validated->errors)) {
@@ -54,7 +58,9 @@ class CategoryController extends Controller
 
     public function edit(int $id)
     {
-        $this->render("Categories/edit", [
+                Auth::require();
+
+    $this->render("Categories/edit", [
             "category" => $this->getCategory($id),
             "categories" => $this->getCategories()
         ]);
@@ -62,7 +68,9 @@ class CategoryController extends Controller
 
     public function update(array $attributes)
     {
-        $validated = new CategoryValidation($attributes, $_FILES);
+                    Auth::require();
+
+    $validated = new CategoryValidation($attributes, $_FILES);
 
         if (! empty($validated->errors)) {
             $this->render("Categories/edit", [
@@ -83,7 +91,9 @@ class CategoryController extends Controller
 
     public function destroy(array $attributes)
     {
-        if (!empty($this->isCategoryHaveProducts($attributes['id']))) {
+               return Auth::require();
+
+    if (!empty($this->isCategoryHaveProducts($attributes['id']))) {
             Session::flash("Success-Message", "You Can't Delete This Category Because Contain Some Products!");
         } else {
             category()->delete($attributes['id']);
