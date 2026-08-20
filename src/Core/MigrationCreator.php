@@ -18,11 +18,12 @@ class MigrationCreator
     {
         $this->handleMakeCommand($this->migrationName);
         file_put_contents($this->migrationFilePath, $this->contentOfMigrationFile);
+        exit(0);
     }
 
     private function migrationFileExists(): bool
     {
-        if(! is_dir($this->migrationsPath)){
+        if (! is_dir($this->migrationsPath)) {
             throw new DirectoryNotFoundException("Directory Of Migration Path Not Found..!");
         }
         $files = glob($this->migrationsPath . '/*.php');
@@ -49,7 +50,7 @@ class MigrationCreator
             exit(1);
         } else {
             $migrationFileName = date("Y_m_d_His") . "_{$this->migrationName}";
-            $this->migrationFilePath = $this->migrationsPath. "/" .$migrationFileName.".php";
+            $this->migrationFilePath = $this->migrationsPath . "/" . $migrationFileName . ".php";
             $className = resolveClassName($this->migrationName);
             $this->contentOfMigrationFile =  <<<PHP
 <?php
@@ -64,6 +65,8 @@ class {$className} extends Migration
     public function down(): void {}
 }
 PHP;
+
+            echo "Migration File: $file is added Successfully To Migrations Directory";
         }
     }
 }
