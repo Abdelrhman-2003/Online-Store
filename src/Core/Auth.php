@@ -11,6 +11,12 @@ class Auth
         return Session::has("user_id");
     }
 
+    public static function guest(){
+        if(static::check()){
+           redirect("/");
+        }
+    }
+
     public static function require()
     {
         if (! static::check()) {

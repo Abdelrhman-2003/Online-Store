@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Auth;
 use App\Core\Hash;
 use App\Core\Session;
 use App\Http\Validation\LoginValidation;
@@ -14,6 +15,7 @@ class AuthController extends Controller
     // Register
     public function showRegister()
     {
+        Auth::guest();
         $this->render("Auth/register", [
             "categories" => $this->getCategories()
         ]);
@@ -21,6 +23,7 @@ class AuthController extends Controller
 
     public function register(array $attributes)
     {
+        Auth::guest();
         $validate = new RegisterValidation($attributes);
         if (! empty($validate->errors)) {
             $this->render("Auth/register", [
@@ -42,6 +45,7 @@ class AuthController extends Controller
     // Login
     public function showLogin()
     {
+        Auth::guest();
         $this->render("Auth/login", [
             "categories" => $this->getCategories()
         ]);
@@ -49,6 +53,7 @@ class AuthController extends Controller
 
     public function login(array $attributes)
     {
+        Auth::guest();
         $validate = new LoginValidation($attributes);
         if (! empty($validate->errors)) {
             $this->render("Auth/login", [
