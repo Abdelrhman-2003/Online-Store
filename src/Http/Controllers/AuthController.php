@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Core\Hash;
 use App\Core\Session;
+use App\Http\Validation\LoginValidation;
 use App\Http\Validation\RegisterValidation;
 use App\Models\User;
 
@@ -43,6 +44,18 @@ class AuthController extends Controller
         $this->render("Auth/login", [
             "categories" => $this->getCategories()
         ]);
+    }
+
+    public function login(array $attributes)
+    {
+        $validate = new LoginValidation($attributes);
+        if (! empty($validate->errors)) {
+            $this->render("Auth/login", [
+                "categories" => $this->getCategories(),
+                "error" => $validate->errors
+            ]);
+        }
+        redirect('/');
     }
 
     private function getCategories()
