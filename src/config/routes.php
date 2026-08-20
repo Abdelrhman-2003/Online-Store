@@ -20,3 +20,6 @@ $router->post("/products/store" , "ProductController::store");
 $router->get("/products/edit/{id}" , "ProductController::edit");
 $router->put("/products/update" , "ProductController::update");
 $router->delete("/products/destroy" , "ProductController::destroy");
+
+//Auth/Registration
+$router->get("/register" , "AuthController::showRegister");
