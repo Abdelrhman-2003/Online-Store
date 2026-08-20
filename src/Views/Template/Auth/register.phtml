@@ -37,9 +37,10 @@
                                 name="name"
                                 type="text"
                                 placeholder="John Doe"
-                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200"
-                                >
+                                class="w-full px-0 py-2.5 mb-0 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200">
                         </div>
+                        <p class=" text-red-500 text-md mt-0 pt-0"> <?= $error['name'] ?? null ?></p>
+
 
                         <!-- Email -->
                         <div>
@@ -49,11 +50,11 @@
                             <input
                                 id="email"
                                 name="email"
-                                type="email"
                                 placeholder="you@example.com"
-                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200"
-                                >
+                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200">
                         </div>
+                                    <p class="text-red-500 text-md"> <?= $error['email'] ?? null ?></p>
+
 
                         <!-- Password -->
                         <div>
@@ -65,9 +66,9 @@
                                 name="password"
                                 type="password"
                                 placeholder="••••••••"
-                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200"
-                                >
+                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200">
                         </div>
+            <p class="text-red-500 text-md"> <?= $error['password'] ?? null ?></p>
 
                         <!-- Confirm password -->
                         <div>
@@ -79,10 +80,9 @@
                                 name="password_confirmation"
                                 type="password"
                                 placeholder="••••••••"
-                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200"
-                                >
+                                class="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-indigo-100 text-indigo-950 placeholder-indigo-950/30 focus:outline-none focus:border-orange-500 transition-colors duration-200">
                         </div>
-
+                            <p class="text-red-500 text-md"> <?= $error['password_confirmation'] ?? null ?></p>
                         <!-- Submit -->
                         <button
                             type="submit"

@@ -157,7 +157,7 @@ function imageValidation()
     return $image;
 }
 
-function migCommand($command, $argTwo = null)
+function migCommand(?string $command, $argTwo = null)
 {
     $runner = new MigrationRunner("src/Database/Migrations");
 

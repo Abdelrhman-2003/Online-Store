@@ -21,5 +21,6 @@ $router->get("/products/edit/{id}" , "ProductController::edit");
 $router->put("/products/update" , "ProductController::update");
 $router->delete("/products/destroy" , "ProductController::destroy");
 
-//Auth/Registration
+//Auth/Register
 $router->get("/register" , "AuthController::showRegister");
+$router->post("/register" , "AuthController::register");

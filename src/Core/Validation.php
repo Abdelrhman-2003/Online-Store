@@ -3,11 +3,27 @@
 namespace App\Core;
 
 use App\Core\Exceptions\FileNotFoundException;
+use App\Models\User;
 
 abstract class Validation
 {
     protected $method;
     public $errors = [];
+
+    public function __construct(private array $attributes)
+    {
+        //
+    }
+
+    protected function isCorrectEmailFormatting(string $email): bool
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    public function isEmailExists(string $email)
+    {
+        return User::findByEmail($email);
+    }
 
     protected function textValidate(string $value, int $min = 1, int $max = 100): bool
     {
