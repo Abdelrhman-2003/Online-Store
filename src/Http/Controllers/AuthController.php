@@ -17,6 +17,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // Register
     public function register(array $attributes)
     {
         $validate = new RegisterValidation($attributes);
@@ -31,10 +32,18 @@ class AuthController extends Controller
         $user->email = $attributes['email'];
         $user->password = Hash::make($attributes['password']);
         $user->save();
-        
-        Session::put("user_id" , $user->id);
+
+        Session::put("user_id", $user->id);
         redirect('/');
-        }
+    }
+
+    // Login
+    public function showLogin()
+    {
+        $this->render("Auth/login", [
+            "categories" => $this->getCategories()
+        ]);
+    }
 
     private function getCategories()
     {
