@@ -16,15 +16,18 @@ $router->get("/products", "ProductController::index");
 $router->get("/products/show/{id}", "ProductController::show");
 $router->get("/products/cards", "ProductController::indexCards");
 $router->get("/products/create/{cateogryId}", "ProductController::create");
-$router->post("/products/store" , "ProductController::store");
-$router->get("/products/edit/{id}" , "ProductController::edit");
-$router->put("/products/update" , "ProductController::update");
-$router->delete("/products/destroy" , "ProductController::destroy");
+$router->post("/products/store", "ProductController::store");
+$router->get("/products/edit/{id}", "ProductController::edit");
+$router->put("/products/update", "ProductController::update");
+$router->delete("/products/destroy", "ProductController::destroy");
 
 // Auth/Register
-$router->get("/register" , "AuthController::showRegister");
-$router->post("/register" , "AuthController::register");
+$router->get("/register", "AuthController::showRegister");
+$router->post("/register", "AuthController::register");
 
 // Auth/Login
-$router->get("/login" , "AuthController::showLogin");
-$router->post("/login" , "AuthController::login");
+$router->get("/login", "AuthController::showLogin");
+$router->post("/login", "AuthController::login");
+
+// Auth/Logout
+$router->post("/logout", "AuthController::logout");

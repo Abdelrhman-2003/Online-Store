@@ -11,6 +11,7 @@ use App\Models\User;
 class AuthController extends Controller
 {
 
+    // Register
     public function showRegister()
     {
         $this->render("Auth/register", [
@@ -18,7 +19,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // Register
     public function register(array $attributes)
     {
         $validate = new RegisterValidation($attributes);
@@ -35,6 +35,7 @@ class AuthController extends Controller
         $user->save();
 
         Session::put("user_id", $user->id);
+        Session::put("user_name" , $user->name);
         redirect('/');
     }
 
@@ -56,6 +57,14 @@ class AuthController extends Controller
             ]);
         }
         redirect('/');
+    }
+
+    // Logout
+
+    public function logout(){
+        Session::unset("user_id");
+        session_destroy();
+        redirect('/login');
     }
 
     private function getCategories()

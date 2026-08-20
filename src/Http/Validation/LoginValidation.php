@@ -34,6 +34,7 @@ class LoginValidation extends Validation
             return false;
         }
         Session::put("user_id", $user->id);
+        Session::put("user_name" , $user->name);
         return true;
     }
 }
