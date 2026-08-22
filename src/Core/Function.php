@@ -4,6 +4,7 @@ use App\Core\Database;
 use App\Core\Exceptions\FileNotFoundException;
 use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
+use App\Core\Session;
 use App\Http\Validation\ImageValidation;
 use App\Models\Category;
 use App\Models\Color;
@@ -275,4 +276,11 @@ function productSize()
         $productSize = new ProductSize();
     }
     return $productSize;
+}
+
+function logout()
+{
+    Session::unset("user_id");
+    session_destroy();
+    redirect('/login');
 }
