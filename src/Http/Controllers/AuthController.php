@@ -38,7 +38,7 @@ class AuthController extends Controller
         $user->save();
 
         Session::put("user_id", $user->id);
-        Session::put("user_name" , $user->name);
+        Session::put("user_name", $user->name);
         redirect('/');
     }
 
@@ -66,10 +66,9 @@ class AuthController extends Controller
 
     // Logout
 
-    public function logout(){
-        Session::unset("user_id");
-        session_destroy();
-        redirect('/login');
+    public function logout()
+    {
+        destorySessionForLoginUser();
     }
 
     private function getCategories()

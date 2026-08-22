@@ -278,7 +278,7 @@ function productSize()
     return $productSize;
 }
 
-function logout()
+function destorySessionForLoginUser()
 {
     Session::unset("user_id");
     session_destroy();
