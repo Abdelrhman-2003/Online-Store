@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -81,12 +82,12 @@ class CategoryController extends Controller
         redirect("/categories");
     }
 
-    public function destroy(array $attributes)
+    public function destroy(int $id)
     {
-        if (!empty($this->isCategoryHaveProducts($attributes['id']))) {
+        if (!empty($this->isCategoryHaveProducts($id))) {
             Session::flash("Success-Message", "You Can't Delete This Category Because Contain Some Products!");
         } else {
-            category()->delete($attributes['id']);
+            category()->delete($id);
             Session::flash("Success-Message", " Deleted Successfully");
         }
         redirect("/categories");
@@ -104,7 +105,7 @@ class CategoryController extends Controller
 
     private function isCategoryHaveProducts(int $id)
     {
-        return product()->find($id);
+        return $this->getProducts($id);
     }
 
     private function getCategoryImage(int $id)

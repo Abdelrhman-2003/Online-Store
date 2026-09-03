@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\ProductValidation;
+use App\Models\Product;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
 
 class ProductController extends Controller
 {
@@ -86,9 +89,9 @@ class ProductController extends Controller
         redirect("/products");
     }
 
-    public function destroy(array $attributes)
+    public function destroy(int $id)
     {
-        $this->deleteProduct($attributes['id']);
+        $this->deleteProduct($id);
         Session::flash("Success-Message", "Product Deleted Successfully");
         redirect("/products");
     }
@@ -110,18 +113,20 @@ class ProductController extends Controller
 
         foreach ($colors as $color) {
             $colorID = $this->getColorID($color);
-            productColor()->product_id = $attributes['id'];
-            productColor()->color_id = $colorID['id'];
-            productColor()->save();
+            $productColor = new ProductColor;
+            $productColor->product_id = $attributes['id'];
+            $productColor->color_id = $colorID['id'];
+            $productColor->save();
         }
 
         db()->execute("DELETE FROM product_size where product_id = ?", [$attributes['id']]);
 
         foreach ($sizes as $size) {
             $sizeID = $this->getSizeID($size);
-            productSize()->product_id = $attributes['id'];
-            productSize()->size_id = $sizeID['id'];
-            productsize()->save();
+            $productSize = new ProductSize;
+            $productSize->product_id = $attributes['id'];
+            $productSize->size_id = $sizeID['id'];
+            $productSize->save();
         }
     }
 
@@ -189,7 +194,7 @@ class ProductController extends Controller
         return db()->fetchAll("SELECT p.id, p.productName, p.productDescription, p.productPrice, p.productImage, c.categoryName 
         AS categoryName
         FROM products p
-        JOIN categories c ON p.category_id = c.id ");
+        JOIN categories c ON p.category_id = c.id" , [] , Product::class);
     }
 
     private function getProduct(int $id): array
@@ -218,15 +223,17 @@ class ProductController extends Controller
 
         foreach ($colors as $color) {
             $colorID = $this->getColorID($color);
-            productColor()->product_id = $lastID;
-            productColor()->color_id = $colorID['id'];
-            productColor()->save();
-        }
+            $productColor = new ProductColor();
+            $productColor->product_id = $lastID;
+            $productColor->color_id = $colorID['id'];
+            $productColor->save();
+            }
         foreach ($sizes as $size) {
             $sizeID = $this->getSizeID($size);
-            productSize()->product_id = $lastID;
-            productSize()->size_id = $sizeID['id'];
-            productsize()->save();
+            $productSize = new ProductSize();
+            $productSize->product_id = $lastID;
+            $productSize->size_id = $sizeID['id'];
+            $productSize->save();
         }
     }
 }

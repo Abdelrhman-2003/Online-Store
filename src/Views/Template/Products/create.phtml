@@ -2,7 +2,6 @@
 <html lang="en">
 <?php
 require base_path("Views/Partials/head.phtml"); ?>
-
 <body class="bg-gray-100">
     <?php require base_path("Views/Partials/nav.phtml") ?>
 
@@ -48,7 +47,7 @@ require base_path("Views/Partials/head.phtml"); ?>
                             class="w-8 h-8 rounded-full bg-<?= $bgNum ?> border-2 border-gray-300 cursor-pointer 
                            peer-checked/<?= $bg ?>:ring-2 peer-checked/<?= $bg ?>:ring-indigo-500">
                         </label>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
                     <p class="text-red-500 text-md"> <?= $errors['productColor'] ?? "" ?></p>
                 </div>
             </div>

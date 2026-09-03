@@ -29,10 +29,10 @@ class Model
         return db()->fetch("SELECT * FROM " . static::$table . " WHERE id = ?", [$id], static::class);
     }
 
-    public static function findOrFail(int $id): static | bool | null
+    public static function findOrFail(int $id): static | bool
     {
         $record = static::find($id);
-        if ($record === null) {
+        if ($record === false) {
             throw new RecordNotFoundException("Record With Id: {$id}, Not Found..!");
         }
         return $record;
@@ -47,13 +47,13 @@ class Model
     {
         if (! isset($this->attributes['id'])) {
             $keys = array_keys($this->attributes);
-
+            
             db()->execute(
                 "INSERT INTO " . static::$table . " (" . implode(', ', $keys) . ")" .
-                    " VALUES (" . implode(', ', array_fill(0, count($keys), '?')) . ")",
+                " VALUES (" . implode(', ', array_fill(0, count($keys), '?')) . ")",
                 array_values($this->attributes)
-            );
-            $this->attributes['id'] =  db()->getLastId();
+                );
+                $this->attributes['id'] =  db()->getLastId();
         } else {
             $attr = $this->attributes;
             unset($attr['id']);
