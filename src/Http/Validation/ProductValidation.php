@@ -57,7 +57,7 @@ class ProductValidation extends Validation
             } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
                 $this->errors['productImage'] = "Invalid Size, Size Must Be Under 5MB.";
             } else {
-                imageValidation()->isValidProductImage($image, $attributes['product_name']);
+               return imageValidation()->isValidProductImage($image, $attributes['product_name']);
             }
         }
     }

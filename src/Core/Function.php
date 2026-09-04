@@ -211,11 +211,11 @@ function errorHandlingAtMigrateFile(?string $command, ?string $argTwo)
         errorLog($e->getMessage(), $e->getFile(), $e->getLine());
         echo "error is found, Check error.log";
         return false;
-        } catch (Exception $e) {
+    } catch (Exception $e) {
         errorLog($e->getMessage(), $e->getFile(), $e->getLine());
         echo "error is found, Check error.log";
-            return false;
-        } finally {
+        return false;
+    } finally {
         db()->disConnect();
     }
 }

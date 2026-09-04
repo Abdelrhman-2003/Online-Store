@@ -38,7 +38,7 @@ class CategoryValidation extends Validation
             } elseif (! imageValidation()->isCorrectSizeOfImage($image['image']['size'])) {
                 $this->errors['categoryImage'] = "Invalid Size, Size Must Be Under 5MB.";
             } else {
-                imageValidation()->isValidCategoryImage($image, $attributes['category-name']);
+               return imageValidation()->isValidCategoryImage($image, $attributes['category-name']);
             }
         }
     }
