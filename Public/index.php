@@ -6,12 +6,7 @@ error_reporting(E_ALL);
 
 session_start();
 
-require __DIR__ . ("/../src/Core/Function.php");
-require __DIR__ . ("/../src/Core/Exceptions/FileNotFoundException.php");
-
-spl_autoload_register(function ($class) {
-        return splAutoLoaderHandle($class);
-});
+require  __DIR__ . "/../vendor/autoload.php";
 
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Router;
