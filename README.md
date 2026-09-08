@@ -62,7 +62,17 @@ cd Online-Store
 
 ---
 
-### 2. Create the Database
+### 2. Install Composer Dependencies
+
+Install the project dependencies and generate the Composer autoloader:
+
+```bash
+composer install
+```
+---
+ 
+
+### 3. Create the Database
 
 Create a new database named:
 
