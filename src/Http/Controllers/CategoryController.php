@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Auth;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
 use App\Models\Category;
-use App\Models\Product;
 
 class CategoryController extends Controller
 {
@@ -27,6 +27,7 @@ class CategoryController extends Controller
 
     public function create()
     {
+        Auth::require();
         $this->render("Categories/create", [
             "categories" => Category::getCategories(),
         ]);
@@ -34,6 +35,8 @@ class CategoryController extends Controller
 
     public function store(array $attributes)
     {
+        Auth::require();
+
         $validated = new CategoryValidation($attributes, $_FILES);
 
         if (!empty($validated->errors)) {
@@ -50,6 +53,7 @@ class CategoryController extends Controller
 
     public function edit(int $id)
     {
+        Auth::require();
         $this->render("Categories/edit", [
             "category" => Category::getCategory($id),
             "categories" => Category::getCategories()
@@ -58,6 +62,8 @@ class CategoryController extends Controller
 
     public function update(array $attributes)
     {
+        Auth::require();
+
         $this->validated = new CategoryValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->render("Categories/edit", [
@@ -75,6 +81,7 @@ class CategoryController extends Controller
 
     public function destroy(int $id)
     {
+         Auth::require();
         Category::destroy($id);
         redirect("/categories");
     }

@@ -4,6 +4,7 @@ use App\Core\Database;
 use App\Core\Exceptions\FileNotFoundException;
 use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
+use App\Core\Session;
 use App\Http\Validation\ImageValidation;
 use App\Models\Category;
 use App\Models\Color;
@@ -156,7 +157,7 @@ function imageValidation()
     return $image;
 }
 
-function migCommand($command, $argTwo = null)
+function migCommand(?string $command, $argTwo = null)
 {
     $runner = new MigrationRunner("src/Database/Migrations");
 
@@ -181,6 +182,7 @@ Available Commands:
    run          Migrates new database upgrades
    rollback     Rollbacks the last migration";
             return true;
+
         default:
             echo "Unknown Command : {$command}";
             return false;
@@ -264,4 +266,11 @@ function checkFetchMode($statement, $class)
         $statement->setFetchMode(PDO::FETCH_ASSOC);
     }
     return $statement;
+}
+
+function destorySessionForLoginUser()
+{
+    Session::unset("user_id");
+    session_destroy();
+    redirect('/login');
 }

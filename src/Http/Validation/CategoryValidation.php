@@ -2,7 +2,6 @@
 
 namespace App\Http\Validation;
 
-use App\Http\Validation\ImageValidation;
 use App\Core\Validation;
 
 class CategoryValidation extends Validation

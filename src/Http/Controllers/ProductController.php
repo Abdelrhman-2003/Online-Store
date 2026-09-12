@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Auth;
+use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\ProductValidation;
 use App\Models\Category;
@@ -33,6 +35,8 @@ class ProductController extends Controller
 
     public function create(int $id): void
     {
+        Auth::require();
+
         $this->render("Products/create", [
             "errors" => $this->validated->errors ?? null,
             "category" => Category::getCategoryNameAndId($id),
@@ -44,6 +48,8 @@ class ProductController extends Controller
 
     public function edit(int $id)
     {
+                Auth::require();
+
         $this->render("Products/edit", [
             "errors" => $this->validated->errors ?? null,
             "categories" => Category::getCategories(),
@@ -55,15 +61,10 @@ class ProductController extends Controller
         ]);
     }
 
-    public function indexCards(): void
-    {
-        $this->render("Products/indexCards", [
-            "categories" => Category::getCategories()
-        ]);
-    }
-
     public function store(array $attributes): void
     {
+        Auth::require();
+
         $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->create($attributes['id']);
@@ -75,8 +76,17 @@ class ProductController extends Controller
         redirect("/products");
     }
 
+    public function indexCards(): void
+    {
+        Auth::require();
+        $this->render("Products/indexCards", [
+            "categories" => Category::getCategories()
+        ]);
+    }
     public function update(array $attributes)
     {
+        Auth::require();
+
         $this->validated = new ProductValidation($attributes, $_FILES);
         if (! empty($this->validated->errors)) {
             $this->edit($attributes['id']);

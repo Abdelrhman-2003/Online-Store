@@ -3,7 +3,6 @@
 namespace App\Http\Validation;
 
 use App\Core\Validation;
-use App\Http\Validation\ImageValidation;
 
 class ProductValidation extends Validation
 {
