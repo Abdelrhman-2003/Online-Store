@@ -16,7 +16,10 @@ spl_autoload_register(function ($class) {
 });
 
 use App\Core\Exceptions\RecordNotFoundException;
+use App\Core\Model;
 use App\Core\Router;
+use App\Models\Category;
+
 
 $uri = parse_url($_SERVER['REQUEST_URI'])["path"];
 $method = $_POST["_method"] ?? $_SERVER["REQUEST_METHOD"];

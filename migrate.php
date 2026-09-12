@@ -11,4 +11,8 @@ require "src/Core/MigrationCreator.php";
 $command = $argv[1] ?? null;
 $argTwo = $argv[2] ?? null;
 
-errorHandlingAtMigrateFile($command , $argTwo);
+$result = errorHandlingAtMigrateFile($command, $argTwo);
+if ($result) {
+    exit(0);
+}
+exit(1);

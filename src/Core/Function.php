@@ -5,6 +5,10 @@ use App\Core\Exceptions\FileNotFoundException;
 use App\Core\MigrationCreator;
 use App\Core\MigrationRunner;
 use App\Http\Validation\ImageValidation;
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\Size;
 
 function dd($value)
 {
@@ -79,12 +83,13 @@ function db()
     return $database;
 }
 
-
+// future modification from static to dynamic
 function checkColor($category)
 {
     return ($category === "Clothies-Category" || $category === "Technology-Category") ? true : false;
 }
 
+// future modification from static to dynamic
 function checkSize($category)
 {
     return ($category === "Clothies-Category") ? true : false;
@@ -158,13 +163,15 @@ function migCommand($command, $argTwo = null)
     switch ($command) {
         case "run":
             $runner->run();
+            return true;
 
         case "rollback":
             $runner->rollBack();
+            return true;
 
         case "make":
             (new MigrationCreator($argTwo, "src/Database/Migrations"))->make();
-            exit(0);
+            return true;
 
         case null:
             echo "Usage:
@@ -173,10 +180,10 @@ function migCommand($command, $argTwo = null)
 Available Commands:
    run          Migrates new database upgrades
    rollback     Rollbacks the last migration";
-
+            return true;
         default:
             echo "Unknown Command : {$command}";
-            exit(1);
+            return false;
     }
 }
 
@@ -196,19 +203,65 @@ function sterilizeMigrationFileName(string $file): string
     return implode("_", $file);
 }
 
-function errorHandlingAtMigrateFile(string $command , ?string $argTwo)
+function errorHandlingAtMigrateFile(?string $command, ?string $argTwo)
 {
     try {
-        migCommand($command, $argTwo);
+        return migCommand($command, $argTwo);
     } catch (RuntimeException $e) {
         errorLog($e->getMessage(), $e->getFile(), $e->getLine());
         echo "error is found, Check error.log";
-        exit(1);
+        return false;
     } catch (Exception $e) {
         errorLog($e->getMessage(), $e->getFile(), $e->getLine());
         echo "error is found, Check error.log";
-        exit(1);
+        return false;
     } finally {
         db()->disConnect();
     }
+}
+
+function category()
+{
+    static $category = null;
+    if ($category === null) {
+        $category = new Category;
+    }
+    return $category;
+}
+
+function product()
+{
+    static $product = null;
+    if ($product === null) {
+        $product = new Product;
+    }
+    return $product;
+}
+
+function size()
+{
+    static $size = null;
+    if ($size === null) {
+        $size = new Size;
+    }
+    return $size;
+}
+
+function color()
+{
+    static $color = null;
+    if ($color === null) {
+        $color = new Color;
+    }
+    return $color;
+}
+
+function checkFetchMode($statement, $class)
+{
+    if ($class) {
+        $statement->setFetchMode(PDO::FETCH_CLASS, $class);
+    } else {
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+    }
+    return $statement;
 }

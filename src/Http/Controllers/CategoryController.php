@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\CategoryValidation;
+use App\Models\Category;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
     public function show(int $id)
     {
-            view("Category/show", [
-                "products" => $this->getProducts($id),
-                "category" => $this->getCategory($id),
-                "categories" => $this->getCategories()
-            ]);
-            die();
+        $this->render("Category/show", [
+            "products" => Category::getProducts($id),
+            "category" => Category::getCategory($id),
+            "categories" => Category::getCategories()
+        ]);
     }
 
     public function index()
     {
         $this->render("Categories/index", [
-            "categories" => $this->getCategories(),
+            "categories" => Category::getCategories(),
         ]);
     }
 
     public function create()
     {
         $this->render("Categories/create", [
-            "categories" => $this->getCategories(),
+            "categories" => Category::getCategories(),
         ]);
     }
 
@@ -38,18 +38,12 @@ class CategoryController extends Controller
 
         if (!empty($validated->errors)) {
             $this->render("Categories/create", [
-                "categories" => $this->getCategories(),
+                "categories" => Category::getCategories(),
                 "errors" => $validated->errors
             ]);
         }
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
-
-        db()->execute("INSERT INTO categories (categoryName , categoryDescription , categoryImage) 
-        VALUE (?, ?, ?)", [
-            $attributes['category-name'],
-            $attributes["category-desc"],
-            $attributes['category-name'] . "." . $extenstion
-        ]);
+        Category::create($attributes, $extenstion);
         Session::flash("Success-Message", $attributes['category-name'] . " Added Successfully");
         redirect("/categories");
     }
@@ -57,70 +51,31 @@ class CategoryController extends Controller
     public function edit(int $id)
     {
         $this->render("Categories/edit", [
-            "category" => $this->getCategory($id),
-            "categories" => $this->getCategories()
+            "category" => Category::getCategory($id),
+            "categories" => Category::getCategories()
         ]);
     }
 
     public function update(array $attributes)
     {
-        $validated = new CategoryValidation($attributes, $_FILES);
-
-        if (! empty($validated->errors)) {
+        $this->validated = new CategoryValidation($attributes, $_FILES);
+        if (! empty($this->validated->errors)) {
             $this->render("Categories/edit", [
-                "categories" => $this->getCategories(),
-                "category" => $this->getCategory($attributes['id']),
-                "error" => $validated->errors
+                "categories" => Category::getCategories(),
+                "category" => Category::getCategory($attributes['id']),
+                "error" => $this->validated->errors
             ]);
         }
-
-        $oldImage = $this->getCategoryImage($attributes['id']);
+        $oldImage = Category::getCategoryImage($attributes['id']);
         $extension = checkImage($_FILES, $oldImage['categoryImage']);
-
-        db()->execute("UPDATE categories set categoryName = ? , categoryDescription = ? , categoryImage = ? where id = ?", [
-            $attributes['category-name'],
-            $attributes['category-desc'],
-            $attributes['category-image'],
-            $attributes['id']
-        ]);
+        Category::update($attributes, $extension);
         Session::flash("Success-Message", $attributes['category-name'] . " Updated Successfully");
         redirect("/categories");
     }
 
-    public function destroy(array $attributes)
+    public function destroy(int $id)
     {
-        if (!empty($this->getProducts($attributes['id']))) {
-            Session::flash("Success-Message", "You Can't Delete This Category Because Contain Some Products!");
-        } else {
-            db()->execute("DELETE From categories where id = ?", [$attributes['id']]);
-            Session::flash("Success-Message", " Deleted Successfully");
-        }
-
+        Category::destroy($id);
         redirect("/categories");
-    }
-
-    private function getCategories()
-    {
-        return db()->fetchAll("SELECT * FROM categories");
-    }
-
-    private function getCategory(int $id)
-    {
-        $category = db()->fetch("SELECT * FROM categories where id = ? LIMIT 1 ", [$id]) ?? null;
-
-        if ($category === false) {
-            throw new RecordNotFoundException("Category with ID {$id} not found!");
-        }
-        return $category;
-    }
-
-    private function getProducts(int $id)
-    {
-        return db()->fetchAll("SELECT * FROM products where category_id = ?", [$id]);
-    }
-
-    private function getCategoryImage(int $id)
-    {
-        return db()->fetch("SELECT categoryImage FROM categories where id = ?", [$id]);
     }
 }

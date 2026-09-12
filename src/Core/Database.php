@@ -15,7 +15,6 @@ class Database
     {
         $dsn = "mysql:" . http_build_query($config, "", ";");
         $this->connection = new PDO($dsn, $config['username'], $config['password'], [
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]);
     }
@@ -30,16 +29,18 @@ class Database
         }
     }
 
-    public function fetchAll(string $sql, array $params = [])
+    public function fetchAll(string $sql , array $params = [], string $class = null )
     {
-        $this->query($sql, $params);
-        return $this->statement->fetchAll();
+        $this->query($sql , $params);
+        $statement = checkFetchMode($this->statement , $class);
+        return $statement->fetchAll();
     }
 
-    public function fetch(string $sql, array $params = [])
+    public function fetch(string $sql , array $params = [] , string $class = null)
     {
         $this->query($sql, $params);
-        return $this->statement->fetch();
+        $statement = checkFetchMode($this->statement , $class);
+        return $statement->fetch();
     }
 
     public function execute(string $sql, array $params = [])
