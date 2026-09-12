@@ -6,26 +6,30 @@ use App\Core\Auth;
 use App\Core\Exceptions\RecordNotFoundException;
 use App\Core\Session;
 use App\Http\Validation\ProductValidation;
+use App\Models\Category;
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
+use App\Models\Size;
 
 class ProductController extends Controller
 {
-    protected $validated;
-
     public function index(): void
     {
         $this->render("Products/index", [
-            "products" => $this->getProducts(),
-            "categories" => $this->getCategories()
+            "products" => Product::getProducts(),
+            "categories" => Category::getCategories()
         ]);
     }
 
     public function show(int $id): void
     {
         $this->render("Products/show", [
-            "categories" => $this->getCategories(),
-            "product" => $this->getProduct($id),
-            "productColor" => $this->getProductColors($id),
-            "productSize" => $this->getProductSizes($id)
+            "categories" => Category::getCategories(),
+            "product" => Product::getProduct($id),
+            "productColor" => ProductColor::getProductColors($id),
+            "productSize" => ProductSize::getProductSizes($id)
         ]);
     }
 
@@ -35,10 +39,25 @@ class ProductController extends Controller
 
         $this->render("Products/create", [
             "errors" => $this->validated->errors ?? null,
-            "category" => $this->getCategoryNameAndId($id),
-            "categories" => $this->getCategories(),
-            "colors" => $this->getColors(),
-            "sizes" => $this->getSizes()
+            "category" => Category::getCategoryNameAndId($id),
+            "categories" => Category::getCategories(),
+            "colors" => Color::getColors(),
+            "sizes" => Size::getSizes()
+        ]);
+    }
+
+    public function edit(int $id)
+    {
+                Auth::require();
+
+        $this->render("Products/edit", [
+            "errors" => $this->validated->errors ?? null,
+            "categories" => Category::getCategories(),
+            "product" => Product::getProduct($id),
+            "colors" => Color::getColors(),
+            "sizes" => Size::getSizes(),
+            "productColor" => ProductColor::getProductColors($id),
+            "productSize" => ProductSize::getProductSizes($id)
         ]);
     }
 
@@ -52,7 +71,7 @@ class ProductController extends Controller
             die();
         }
         $extenstion = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
-        $this->createProduct($attributes, $extenstion);
+        Product::create($attributes, $extenstion);
         Session::flash("Success-Message", $attributes['product_name'] . " Added Successfuly!");
         redirect("/products");
     }
@@ -61,25 +80,9 @@ class ProductController extends Controller
     {
         Auth::require();
         $this->render("Products/indexCards", [
-            "categories" => $this->getCategories()
+            "categories" => Category::getCategories()
         ]);
     }
-
-    public function edit(int $id)
-    {
-        Auth::require();
-
-        $this->render("Products/edit", [
-            "errors" => $this->validated->errors ?? null,
-            "categories" => $this->getCategories(),
-            "product" => $this->getProduct($id),
-            "colors" => $this->getColors(),
-            "sizes" => $this->getSizes(),
-            "productColor" => $this->getProductColors($id),
-            "productSize" => $this->getProductSizes($id)
-        ]);
-    }
-
     public function update(array $attributes)
     {
         Auth::require();
@@ -89,162 +92,17 @@ class ProductController extends Controller
             $this->edit($attributes['id']);
             die();
         }
-        $oldImage = $this->getProductImage($attributes['id']);
+        $oldImage = Product::getProductImage($attributes['id']);
         $extension = checkImage($_FILES, $oldImage['productImage']);
-        $this->editProduct($attributes, $extension);
+        Product::update($attributes, $extension);
         Session::flash("Success-Message", $attributes['product_name'] . " Updated Successfully!");
         redirect("/products");
     }
 
-    public function destroy(array $attributes)
+    public function destroy(int $id)
     {
-        Auth::require();
-
-        $this->deleteProduct($attributes['id']);
+        Product::destroy($id);
         Session::flash("Success-Message", "Product Deleted Successfully");
         redirect("/products");
-    }
-
-    // Database helper function Query
-    private function editProduct(array $attributes, ?string $extension)
-    {
-        Auth::require();
-
-        product()->productName = $attributes["product_name"];
-        product()->productImage = $attributes["product_name"] . "." . $extension;
-        product()->productPrice = abs($attributes['price']);
-        product()->productDescription = $attributes["description"];
-        product()->id = $attributes["id"];
-        product()->save();
-
-        $colors = $attributes['colors'] ?? [];
-        $sizes = $attributes['sizes'] ?? [];
-
-        db()->execute("DELETE FROM product_color WHERE product_id = ?", [$attributes['id']]);
-
-        foreach ($colors as $color) {
-            $colorID = $this->getColorID($color);
-            productColor()->product_id = $attributes['id'];
-            productColor()->color_id = $colorID['id'];
-            productColor()->save();
-        }
-
-        db()->execute("DELETE FROM product_size where product_id = ?", [$attributes['id']]);
-
-        foreach ($sizes as $size) {
-            $sizeID = $this->getSizeID($size);
-            productSize()->product_id = $attributes['id'];
-            productSize()->size_id = $sizeID['id'];
-            productsize()->save();
-        }
-    }
-
-    private function deleteProduct(int $id)
-    {
-        Auth::require();
-
-        product()->delete($id);
-    }
-
-    private function getCategories(): array
-    {
-        return category()->all();
-    }
-
-    private function getCategoryNameAndId(int $id): array
-    {
-        $categoryNameAndId = db()->fetch("SELECT categoryName , id FROM categories where id = ? LIMIT 1", [$id]);
-        if ($categoryNameAndId === false) {
-            throw new RecordNotFoundException("Category with ID {$id} not found!");
-        }
-        return $categoryNameAndId;
-    }
-
-    private function getProductImage(int $id): array
-    {
-        return db()->fetch("SELECT productImage from products where id = ? ", [$id]);
-    }
-
-    private function getColorID(string $colorName): array
-    {
-        return db()->fetch("SELECT id from colors where colorName = ? LIMIT 1", ["$colorName"]);
-    }
-
-    private function getSizeID(string $sizeName): array
-    {
-        return db()->fetch("SELECT id FROM sizes where sizeName = ? LIMIT 1", ["$sizeName"]);
-    }
-
-    private function getColors(): array
-    {
-        return color()->all();
-    }
-
-    private function getSizes(): array
-    {
-        return size()->all();
-    }
-
-    private function getProductColors(int $id): array
-    {
-        return db()->fetchAll(
-            "SELECT c.colorName FROM product_color pc JOIN colors c ON pc.color_id = c.id WHERE pc.product_id = ?",
-            [$id]
-        );
-    }
-    private function getProductSizes(int $id): array
-    {
-        return db()->fetchAll(
-            "SELECT s.sizeName FROM product_size pc JOIN sizes s ON pc.size_id = s.id WHERE pc.product_id = ?",
-            [$id]
-        );
-    }
-
-    private function getProducts(): array
-    {
-        return db()->fetchAll("SELECT p.id, p.productName, p.productDescription, p.productPrice, p.productImage, c.categoryName 
-        AS categoryName
-        FROM products p
-        JOIN categories c ON p.category_id = c.id ");
-    }
-
-    private function getProduct(int $id): array
-    {
-        $product = db()->fetch("SELECT p.id, p.productName, p.productDescription, p.productPrice, p.productImage, c.categoryName FROM products p
-        JOIN categories c ON p.category_id = c.id  WHERE p.id = ?", [$id]);
-        if ($product === false) {
-            throw new RecordNotFoundException("Product with ID {$id} not found!");
-        }
-        return $product;
-    }
-
-    private function createProduct(array $attributes, string $extension)
-    {
-        Auth::require();
-        
-        product()->productName  = $attributes["product_name"];
-        product()->productImage = $attributes["product_name"] . "." . $extension;
-        product()->productDescription = $attributes["description"];
-        product()->productPrice = abs($attributes["price"]);
-        product()->category_id = $attributes["id"];
-        product()->save();
-
-        $lastID = db()->getLastId();
-
-        $colors = $attributes['colors'] ?? [];
-        $sizes = $attributes['sizes'] ?? [];
-
-        foreach ($colors as $color) {
-            $colorID = $this->getColorID($color);
-            productColor()->product_id = $lastID;
-            productColor()->color_id = $colorID['id'];
-            productColor()->save();
-        }
-        foreach ($sizes as $size) {
-            $sizeID = $this->getSizeID($size);
-            productSize()->product_id = $lastID;
-            productSize()->size_id = $sizeID['id'];
-            productsize()->save();
-        }
     }
 }

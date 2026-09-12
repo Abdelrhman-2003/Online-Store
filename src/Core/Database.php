@@ -32,19 +32,15 @@ class Database
     public function fetchAll(string $sql , array $params = [], string $class = null )
     {
         $this->query($sql , $params);
-
-        return $this->statement->fetchAll(PDO::FETCH_CLASS, $class);
+        $statement = checkFetchMode($this->statement , $class);
+        return $statement->fetchAll();
     }
 
     public function fetch(string $sql , array $params = [] , string $class = null)
     {
         $this->query($sql, $params);
-    if($class){
-        $this->statement->setFetchMode(PDO::FETCH_CLASS , $class);
-    }else{
-        $this->statement->setFetchMode(PDO::FETCH_ASSOC);
-    }
-        return $this->statement->fetch();
+        $statement = checkFetchMode($this->statement , $class);
+        return $statement->fetch();
     }
 
     public function execute(string $sql, array $params = [])
